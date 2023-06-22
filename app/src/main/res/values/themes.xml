@@ -1,0 +1,68 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.TicTacToe" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_variant</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:fitsSystemWindows">true</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+
+    <style name="Text.MenuTitle" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/raleway_bold</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/white</item>
+
+    </style>
+    <style name="Text.PageTitle" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/raleway_semibold</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:textColor">@color/black</item>
+
+    </style>
+    <style name="Text.Button" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/raleway_semibold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
+    <style name="Text.Subtitle1" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/raleway_semibold</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Text.Subtitle2" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/raleway_semibold</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="Text.Caption" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/raleway_medium</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
+
+
+    <style name="CardView.Primary" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/white</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">12dp</item>
+    </style>
+    <style name="CardView.Secondary" parent="Widget.MaterialComponents.CardView">
+<!--        <item name="backgroundTint">@drawable/gradient_yellow</item>-->
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">12dp</item>
+    </style>
+
+</resources>

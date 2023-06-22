@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/menuFragment">
+
+    <fragment
+        android:id="@+id/menuFragment"
+        android:name="com.android.batya.tictactoe.MenuFragment"
+        android:label="Меню"
+        tools:layout="@layout/fragment_menu"/>
+
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="com.android.batya.tictactoe.GameFragment"
+        android:label="Игра"
+        tools:layout="@layout/fragment_game"/>
+    <fragment
+        android:id="@+id/pauseFragment"
+        android:name="com.android.batya.tictactoe.PauseFragment"
+        android:label="Пауза"
+        tools:layout="@layout/fragment_pause"/>
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.android.batya.tictactoe.HelpFragment"
+        android:label="Помощь"
+        tools:layout="@layout/fragment_help"/>
+
+
+</navigation>
