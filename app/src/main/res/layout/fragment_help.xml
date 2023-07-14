@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="@drawable/light_background"
-    tools:context=".MainActivity">
+    tools:context=".presentation.MainActivity"
+    tools:background="@drawable/light_background">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Помощь"
-            android:textColor="@color/primary"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -28,50 +29,44 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvHelp">
                 <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/viewPager1"
+                    android:id="@+id/viewPager"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:background="@color/primary"
-                    tools:layout="@layout/fragment_content_viewpager"/>
+                    android:layout_height="wrap_content"/>
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:background="@android:color/transparent"
-                    android:layout_marginTop="100dp"
+                    android:layout_marginTop="16dp"
                     app:tabBackground="@drawable/tab_pager_selector"
                     app:tabGravity="center"
                     app:tabIndicatorHeight="0dp" />
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/viewPager2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:background="@color/primary"
-                    tools:layout="@layout/fragment_content_viewpager"/>
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/layoutBottom"
+            android:id="@+id/layoutGameMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="26dp">
+            android:layout_marginBottom="26dp"
+            android:animateLayoutChanges="true">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/bnMainMenu"
-                style="@style/CardView.Primary"
+                style="@style/CardView.White"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="15dp">
+                android:layout_height="62dp"
+                android:layout_marginEnd="12dp"
+                android:layout_weight="1">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -85,7 +80,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
+                        android:layout_marginBottom="2dp"
                         android:text="Меню"
+                        android:textColor="@color/primary"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -93,22 +90,23 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginEnd="20dp"
-                        android:src="@drawable/ic_leave"
+                        android:background="@drawable/ic_leave"
+                        android:backgroundTint="@color/primary"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
-
             <androidx.cardview.widget.CardView
                 android:id="@+id/bnNext"
                 style="@style/CardView.Secondary"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="62dp"
                 android:layout_weight="1">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/gradient_yellow"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -119,6 +117,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
+                        android:layout_marginBottom="2dp"
                         android:text="Далее"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -133,7 +132,6 @@
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
-
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

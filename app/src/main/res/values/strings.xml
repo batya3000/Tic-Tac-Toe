@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">TicTacToe</string>
+    <string name="app_name">Крестики-нолики</string>
+    <string name="quest">Гость</string>
 </resources>

@@ -1,6 +1,10 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    // Add the Crashlytics Gradle plugin
+    id("com.google.firebase.crashlytics")
+
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -38,6 +42,22 @@ android {
 
 dependencies {
 
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:32.1.1')
+
+    implementation 'com.google.firebase:firebase-auth-ktx:22.0.0'
+
+    // Also add the dependency for the Google Play services library and specify its version
+    implementation 'com.google.android.gms:play-services-auth:20.5.0'
+    implementation 'com.google.firebase:firebase-database-ktx'
+
+    // Add the dependencies for the In-App Messaging and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:20.3.2'
+
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.1.2'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.7'
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
     // Navigation
     def nav_version = "2.5.3"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -53,6 +73,10 @@ dependencies {
     implementation "io.insert-koin:koin-core:$koin_version"
     implementation "io.insert-koin:koin-android:$koin_version"
 
+    // Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1'
+
     // Coil
     implementation("io.coil-kt:coil:2.4.0")
 
@@ -61,7 +85,18 @@ dependencies {
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
 
-    implementation 'jp.wasabeef:blurry:4.0.1'
+    // ZoomLayout
+    implementation("com.otaliastudios:zoomlayout:1.9.0")
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+
+    // Lottie
+    implementation 'com.airbnb.android:lottie:4.2.0'
+
+    // Shadows
+    implementation 'com.github.BluRe-CN:ComplexView:1.1'
 
 
     implementation 'androidx.core:core-ktx:1.7.0'

@@ -5,27 +5,190 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/menuFragment">
 
+
     <fragment
         android:id="@+id/menuFragment"
-        android:name="com.android.batya.tictactoe.MenuFragment"
-        android:label="Меню"
-        tools:layout="@layout/fragment_menu"/>
+        android:name="com.android.batya.tictactoe.presentation.menu.MenuFragment"
+        android:label=""
+        tools:layout="@layout/fragment_menu">
+
+        <action
+            android:id="@+id/action_menuFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/slide_in_top"
+            app:exitAnim="@anim/slide_out_bottom"
+            app:popEnterAnim="@anim/slide_in_bottom"
+            app:popExitAnim="@anim/slide_out_top"/>
+
+        <action
+            android:id="@+id/action_menuFragment_to_offlineFragment"
+            app:destination="@id/offlineFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_menuFragment_to_waitingFragment"
+            app:destination="@id/waitingFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/action_menuFragment_to_helpFragment"
+            app:destination="@id/helpFragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom"/>
+        <action
+            android:id="@+id/action_menuFragment_to_friendsFragment"
+            app:destination="@id/friendsFragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom"/>
+        <action
+            android:id="@+id/action_menuFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom"/>
+    </fragment>
 
     <fragment
-        android:id="@+id/gameFragment"
-        android:name="com.android.batya.tictactoe.GameFragment"
-        android:label="Игра"
-        tools:layout="@layout/fragment_game"/>
+        android:id="@+id/offlineFragment"
+        android:name="com.android.batya.tictactoe.presentation.offline.OfflineFragment"
+        android:label="Оффлайн матч"
+        tools:layout="@layout/fragment_offline">
+        <action
+            android:id="@+id/action_offlineFragment_to_menuFragment"
+            app:destination="@id/menuFragment"
+            app:popUpTo="@id/menuFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
+    </fragment>
     <fragment
-        android:id="@+id/pauseFragment"
-        android:name="com.android.batya.tictactoe.PauseFragment"
-        android:label="Пауза"
-        tools:layout="@layout/fragment_pause"/>
+        android:id="@+id/onlineFragment"
+        android:name="com.android.batya.tictactoe.presentation.online.OnlineFragment"
+        android:label="Онлайн матч"
+        tools:layout="@layout/fragment_online">
+        <action
+            android:id="@+id/action_onlineFragment_to_menuFragment"
+            app:destination="@id/menuFragment"
+            app:popUpTo="@id/menuFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/waitingFragment"
+        android:name="com.android.batya.tictactoe.presentation.waiting.WaitingFragment"
+        android:label="Ожидание"
+        tools:layout="@layout/fragment_waiting">
+        <action
+            android:id="@+id/action_waitingFragment_to_onlineFragment"
+            app:destination="@id/onlineFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_waitingFragment_to_menuFragment"
+            app:destination="@id/menuFragment"
+            app:popUpTo="@id/menuFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
+    </fragment>
+
     <fragment
         android:id="@+id/helpFragment"
-        android:name="com.android.batya.tictactoe.HelpFragment"
+        android:name="com.android.batya.tictactoe.presentation.help.HelpFragment"
         android:label="Помощь"
-        tools:layout="@layout/fragment_help"/>
+        tools:layout="@layout/fragment_help">
 
-
+        <action
+            android:id="@+id/action_helpFragment_to_menuFragment"
+            app:destination="@id/menuFragment"
+            app:popUpTo="@id/menuFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.android.batya.tictactoe.presentation.settings.SettingsFragment"
+        android:label="Настройки"
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_settingsFragment_to_menuFragment"
+            app:destination="@id/menuFragment"
+            app:popUpTo="@id/menuFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.android.batya.tictactoe.presentation.profile.ProfileFragment"
+        android:label="Профиль"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_menuFragment"
+            app:destination="@id/menuFragment"
+            app:popUpTo="@id/menuFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_profileFragment_to_friendsFragment"
+            app:destination="@id/friendsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/friendsFragment"
+        android:name="com.android.batya.tictactoe.presentation.friends.FriendsFragment"
+        android:label="Друзья"
+        tools:layout="@layout/fragment_friends">
+        <action
+            android:id="@+id/action_friendsFragment_to_friendsSearchFragment"
+            app:destination="@id/friendsSearchFragment" />
+        <action
+            android:id="@+id/action_friendsFragment_to_friendsInvitationsFragment"
+            app:destination="@id/friendsInvitationsFragment" />
+        <action
+            android:id="@+id/action_friendsFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_friendsFragment_to_menuFragment"
+            app:destination="@id/menuFragment"
+            app:popUpTo="@id/menuFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/friendsSearchFragment"
+        android:name="com.android.batya.tictactoe.presentation.friends.FriendsSearchFragment"
+        android:label="Поиск друзей"
+        tools:layout="@layout/fragment_friends_search"/>
+    <fragment
+        android:id="@+id/friendsInvitationsFragment"
+        android:name="com.android.batya.tictactoe.presentation.friends.FriendInvitationsFragment"
+        android:label="Заявки в друзья"
+        tools:layout="@layout/fragment_friend_invitations"/>
 </navigation>
