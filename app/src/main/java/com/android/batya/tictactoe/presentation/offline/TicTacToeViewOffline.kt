@@ -16,7 +16,6 @@ import com.android.batya.tictactoe.R
 import com.android.batya.tictactoe.domain.model.Cell
 import com.android.batya.tictactoe.domain.model.Field
 import com.android.batya.tictactoe.domain.model.OnFieldChangedListener
-import kotlin.concurrent.thread
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.properties.Delegates
@@ -52,7 +51,9 @@ class TicTacToeViewOffline(
 
     var actionListener: OnCellClickedListener? = null
 
-    private var isDarkTheme by Delegates.notNull<Boolean>()
+    private var isLightTheme by Delegates.notNull<Boolean>()
+    private var areCrossesFirst by Delegates.notNull<Boolean>()
+
     private var gridColor by Delegates.notNull<Int>()
     private var winColor by Delegates.notNull<Int>()
 
@@ -245,8 +246,8 @@ class TicTacToeViewOffline(
             winPath.moveTo(startX , startY)
             winPath.lineTo(endX, endY)
 
-            Log.d("TAG", "cellRectStart: $cellRectStart")
-            Log.d("TAG", "cellRectEnd: $cellRectEnd")
+            //Log.d("TAG", "cellRectStart: $cellRectStart")
+            //Log.d("TAG", "cellRectEnd: $cellRectEnd")
         }
 
         canvas.drawPath(winPath, winPaint)
@@ -265,9 +266,11 @@ class TicTacToeViewOffline(
             for (column in 0 until field.columns) {
                 val cell = field.getCell(row, column)
                 if (cell == Cell.PLAYER_1) {
-                    drawPlayer1(canvas, row, column)
+                    if (areCrossesFirst) drawPlayer1(canvas, row, column)
+                    else drawPlayer2(canvas, row, column)
                 } else if (cell == Cell.PLAYER_2) {
-                    drawPlayer2(canvas, row, column)
+                    if (areCrossesFirst) drawPlayer2(canvas, row, column)
+                    else drawPlayer1(canvas, row, column)
                 }
             }
         }
@@ -284,12 +287,12 @@ class TicTacToeViewOffline(
     private fun drawPlayer2(canvas: Canvas, row: Int, column: Int) {
         val cellRect = getCellRect(row, column)
 
-        if (isDarkTheme) {
-            player2dark.bounds = cellRect.toRect()
-            player2dark.draw(canvas)
-        } else {
+        if (isLightTheme) {
             player2.bounds = cellRect.toRect()
             player2.draw(canvas)
+        } else {
+            player2dark.bounds = cellRect.toRect()
+            player2dark.draw(canvas)
         }
 
     }
@@ -320,7 +323,7 @@ class TicTacToeViewOffline(
 
     private fun initAttributes(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
         val typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.TicTacToeView, defStyleAttr, defStyleRes)
-        isDarkTheme = typedArray.getBoolean(R.styleable.TicTacToeView_isDarkTheme, false)
+        isLightTheme = typedArray.getBoolean(R.styleable.TicTacToeView_isLightTheme, true)
         gridColor = typedArray.getColor(R.styleable.TicTacToeView_gridColor, GRID_DEFAULT_COLOR)
         winColor = typedArray.getColor(R.styleable.TicTacToeView_winColor, WIN_DEFAULT_COLOR)
 
@@ -328,7 +331,7 @@ class TicTacToeViewOffline(
     }
 
     private fun initDefaultColors() {
-        isDarkTheme = false
+        isLightTheme = true
         gridColor = GRID_DEFAULT_COLOR
         winColor = WIN_DEFAULT_COLOR
     }
@@ -362,6 +365,15 @@ class TicTacToeViewOffline(
 
     fun clearActionListeners() {
         actionListener = null
+    }
+    fun setTheme(isLightTheme: Boolean) {
+        this.isLightTheme = isLightTheme
+        invalidate()
+    }
+
+    fun setFirstTurn(areCrossesFirst: Boolean) {
+        this.areCrossesFirst = areCrossesFirst
+        invalidate()
     }
 
     companion object {

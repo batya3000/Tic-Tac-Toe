@@ -1,9 +1,5 @@
 package com.android.batya.tictactoe.presentation.waiting
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,12 +14,19 @@ import com.android.batya.tictactoe.databinding.FragmentWaitingBinding
 import com.android.batya.tictactoe.domain.model.Result
 import com.android.batya.tictactoe.domain.model.Room
 import com.android.batya.tictactoe.domain.model.User
+import com.android.batya.tictactoe.domain.model.UserStatus
+import com.android.batya.tictactoe.presentation.BattleInvitationsViewModel
 import com.android.batya.tictactoe.presentation.menu.UserViewModel
 import com.android.batya.tictactoe.util.Constants
+import com.android.batya.tictactoe.util.gone
 import com.android.batya.tictactoe.util.isNetworkAvailable
+import com.android.batya.tictactoe.util.visible
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.UUID
+import kotlin.concurrent.thread
+import kotlin.math.abs
 
 
 class WaitingFragment : Fragment(R.layout.fragment_waiting) {
@@ -31,12 +34,14 @@ class WaitingFragment : Fragment(R.layout.fragment_waiting) {
     private val binding get() = _binding!!
 
     private lateinit var myId: String
-    private var roomConnected: Room? = null
-    private lateinit var user: User
-    private var rooms: List<Room> = listOf()
+    private var user: User? = null
+
+    private var roomIdArg: String? = null
+    private var started: Boolean = false
+
     private val roomViewModel by viewModel<RoomViewModel>()
     private val userViewModel by viewModel<UserViewModel>()
-
+    private val invitationsViewModel by viewModel<BattleInvitationsViewModel>()
 
 
     override fun onCreateView(
@@ -48,6 +53,7 @@ class WaitingFragment : Fragment(R.layout.fragment_waiting) {
 
         myId = Firebase.auth.currentUser!!.uid
 
+        roomIdArg = arguments?.getString(Constants.ARG_ROOM_ID)
 
         return binding.root
     }
@@ -57,94 +63,91 @@ class WaitingFragment : Fragment(R.layout.fragment_waiting) {
 
         if (isNetworkAvailable(requireContext())) {
             userViewModel.getUser(myId)
-            observeUser()
-            waitingUI()
+
+            observeRoomConnected()
+
+            if (roomIdArg == null) {
+                //userViewModel.updateStatus(myId, UserStatus.WAITING)
+                roomViewModel.getWaitingPool()
+                observeWaitingPool()
+                waitingUI()
+            } else {
+                invitationsViewModel.getOutgoingInvitations(myId)
+                observeBattleInvitations()
+                waitingInvitedUI()
+            }
         } else {
             noInternetUI()
-
-
         }
-
 
         binding.bnMainMenu.setOnClickListener {
-            if (roomConnected != null && roomConnected?.connections?.size != 2) roomViewModel.removeRoom(roomConnected!!.id)
             findNavController().navigate(R.id.action_waitingFragment_to_menuFragment)
         }
-
-
     }
 
-    private fun noInternetUI() {
-        binding.lottie.setBackgroundResource(R.drawable.ic_no_internet)
-        binding.tvTitle.text = "Интернет-соединение отсутствует"
-        binding.tvSubtitle.text = "В онлайн-игру сыграть не получится :("
-        binding.tvMainMenu.text = "Выйти в меню"
-    }
-
-    private fun waitingUI() {
-        binding.lottie.apply {
-            repeatCount = LottieDrawable.INFINITE
-            repeatMode = LottieDrawable.RESTART
-            playAnimation()
-        }
-        binding.tvMainMenu.text = "Отменить поиск"
-    }
-
-    private fun initRoomConnected() {
-        with(binding) {
-            if (rooms.isNotEmpty()) {
-
-                roomConnected = rooms.filter { !it.isRunning }.random()
-                roomViewModel.connect(
-                    roomId = roomConnected!!.id,
-                    user = user
-                )
-            } else {
-                val room = Room(connections = mapOf(myId to user))
-                roomConnected = room
-                roomViewModel.createRoom(room)
-            }
-        }
-    }
-
-    private fun observeUser() {
+    private fun observeRoomConnected() {
         userViewModel.userLiveData.observe(viewLifecycleOwner) { user ->
             when (user) {
                 is Result.Success -> {
-                    this@WaitingFragment.user = user.data
-                    roomViewModel.getRooms()
-                    observeRooms()
+                    this.user = user.data
+
+                    connectToRoom(user.data)
                 }
-                is Result.Failure -> {
-                    Log.d("TAG", "failure load me: ${user.error}")
+                is Result.Failure -> {}
+            }
+        }
+    }
+
+    private fun connectToRoom(user: User) {
+        val roomId = user.roomConnected
+
+        if (roomId != null) {
+            if (findNavController().currentDestination?.id == R.id.waitingFragment) {
+                Log.d("TAG", "starting match $roomId")
+
+                roomViewModel.connect(roomId, myId)
+
+                if (roomIdArg != null) {
+                    findNavController().navigate(
+                        R.id.action_waitingFragment_to_onlineFragment,
+                        bundleOf(Constants.ARG_ROOM_ID to roomId, Constants.ARG_ROOM_PRIVATE to true)
+                    )
+                } else {
+                    findNavController().navigate(
+                        R.id.action_waitingFragment_to_onlineFragment,
+                        bundleOf(Constants.ARG_ROOM_ID to roomId)
+                    )
                 }
             }
         }
     }
 
-    private fun observeRooms() {
-        roomViewModel.roomsLiveData.removeObservers(viewLifecycleOwner)
-        roomViewModel.roomsLiveData.observe(viewLifecycleOwner) { rooms ->
-            when (rooms) {
+    private fun observeBattleInvitations() {
+        invitationsViewModel.invitesLiveData.observe(viewLifecycleOwner) { invitations ->
+            when (invitations) {
                 is Result.Success -> {
-                    this@WaitingFragment.rooms = rooms.data
-                    binding.tvTitle.text = "Поиск игры..."
-                    binding.tvSubtitle.text = "..."
-
-                    val temp = rooms.data.filter { it.connections.containsKey(myId) }
-
-                    if (temp.isNotEmpty()) roomConnected = temp[0]
-
-                    if (roomConnected?.connections?.size == 2) {
-                        roomViewModel.updateIsRunning(roomConnected!!.id, true)
-                        if (findNavController().currentDestination?.id == R.id.waitingFragment) {
-                            findNavController().navigate(
-                                R.id.action_waitingFragment_to_onlineFragment,
-                                bundleOf(Constants.ROOMS_REF to roomConnected!!.id)
-                            )
-                        }
+                    if (invitations.data.isEmpty()) {
+                        invitationDeclinedUI()
                     }
-                    initRoomConnected()
+                }
+                is Result.Failure -> {
+                    Log.d("TAG", "failure load me: ${invitations.error}")
+                }
+            }
+        }
+    }
+
+    private fun observeWaitingPool() {
+        roomViewModel.waitingPoolLiveData.observe(viewLifecycleOwner) { waitingUsers ->
+            when (waitingUsers) {
+                is Result.Success -> {
+                    //Log.d("TAG", "observeWaitingPool: waitingUsers=${waitingUsers.data}")
+
+                    if (waitingUsers.data.isEmpty()) {
+                        userViewModel.updateStatus(myId, UserStatus.WAITING)
+                    } else {
+                        foundEnemy(waitingUsers.data)
+                    }
                 }
                 is Result.Failure -> {
                     Log.d("TAG", "Не могу получить данные...")
@@ -153,11 +156,98 @@ class WaitingFragment : Fragment(R.layout.fragment_waiting) {
         }
     }
 
+    private fun foundEnemy(usersPool: List<User>) {
+        val users = usersPool.filter { it.id != myId }
+        if (users.isNotEmpty() && user != null) {
+            val sortedUsers = users.sortedBy { abs(it.points - user!!.points) }
+            //Log.d("TAG", "users=${users.map { it.points }}")
+            //Log.d("TAG", "sortedUsers=${sortedUsers.map { it.points }}")
 
-    override fun onPause() {
-        super.onPause()
+            val enemy = sortedUsers.firstOrNull()
+            Log.d("TAG", "enemy = ${enemy?.points}")
 
-        if (roomConnected != null && roomConnected?.connections?.size != 2) roomViewModel.removeRoom(roomConnected!!.id)
+            if (enemy != null && enemy.roomConnected == null) {
+                createRoom(myId, enemy.id)
+            }
+            //}
+        }
+    }
 
+    private fun createRoom(myId: String, enemyId: String) {
+        if (!started) {
+            val roomId = UUID.randomUUID().toString()
+
+            Log.d("TAG", "connectToRoom: roomId=$roomId")
+            userViewModel.updateRoomConnected(myId, roomId)
+            userViewModel.updateRoomConnected(enemyId, roomId)
+
+            roomViewModel.createRoom(room = Room(id = roomId))
+            started = true
+        }
+    }
+
+    private fun noInternetUI() {
+        binding.lottie.gone()
+        binding.imageView.visible()
+        binding.imageView.setBackgroundResource(R.drawable.ic_no_internet)
+        binding.tvTitle.text = "Интернет-соединение отсутствует"
+        binding.tvSubtitle.text = "В онлайн-игру сыграть не получится :("
+        binding.tvMainMenu.text = "Выйти в меню"
+        stopTimer()
+    }
+
+    private fun invitationDeclinedUI() {
+        binding.lottie.gone()
+        binding.imageView.visible()
+        binding.imageView.setBackgroundResource(R.drawable.ic_decline_battle_invitation)
+        binding.tvTitle.text = "Ваше приглашение отклонили"
+        binding.tvSubtitle.text = "Возможно, что такой друг вам не нужен..."
+        binding.tvMainMenu.text = "Выйти в меню"
+        stopTimer()
+    }
+
+    private fun waitingUI() {
+        binding.lottie.visible()
+        binding.lottie.apply {
+            repeatCount = LottieDrawable.INFINITE
+            repeatMode = LottieDrawable.RESTART
+            playAnimation()
+        }
+        binding.tvTitle.text = "Поиск игры..."
+        binding.tvSubtitle.gone()
+        binding.tvMainMenu.text = "Отменить поиск"
+        startTimer()
+    }
+
+    private fun startTimer() {
+        binding.cvTime.visible()
+        binding.chronometer.start()
+    }
+    private fun stopTimer() {
+        binding.cvTime.gone()
+        binding.chronometer.stop()
+    }
+    private fun waitingInvitedUI() {
+        binding.lottie.visible()
+        binding.lottie.apply {
+            repeatCount = LottieDrawable.INFINITE
+            repeatMode = LottieDrawable.RESTART
+            playAnimation()
+        }
+        binding.tvTitle.text = "Ожидание игрока..."
+        binding.tvSubtitle.text = "Приглашение отправлено"
+        binding.tvMainMenu.text = "Отменить игру"
+
+        startTimer()
+    }
+
+
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (roomIdArg != null) {
+            invitationsViewModel.removeInvitation(roomIdArg!!)
+        }
     }
 }

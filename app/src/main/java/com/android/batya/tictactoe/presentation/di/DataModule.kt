@@ -14,13 +14,21 @@ val dataModule = module {
 
     single { AuthRepositoryImpl(auth = get(), usersReference = get(named(Constants.USERS_REF))) as AuthRepository }
     single { UserRepositoryImpl(usersReference = get(named(Constants.USERS_REF))) as UserRepository }
-    single { GameRepositoryImpl(auth = get(), gamesReference = get(named(Constants.ROOMS_REF))) as GameRepository }
-    single { RoomRepositoryImpl(auth = get(), roomsReference = get(named(Constants.ROOMS_REF))) as RoomRepository }
-    single { InvitationRepositoryImpl(friendInvitationsReference = get(named(Constants.FRIEND_INVITATIONS_REF))) as InvitationRepository }
+    single { GameRepositoryImpl(gamesReference = get(named(Constants.ROOMS_REF))) as GameRepository }
+    single { RoomRepositoryImpl(roomsReference = get(named(Constants.ROOMS_REF)), usersReference = get(named(Constants.USERS_REF))) as RoomRepository }
+    single {
+        InvitationRepositoryImpl(
+            friendInvitationsReference = get(named(Constants.FRIEND_INVITATIONS_REF)),
+            battleInvitationsReference = get(named(Constants.BATTLE_INVITATIONS_REF))
+        ) as InvitationRepository
+    }
+    single { NotificationRepositoryImpl(notificationAPI = get()) as NotificationRepository }
+    single { SettingsRepositoryImpl(settingsStorage = get()) as SettingsRepository }
+
 
     single { createRetrofit<NotificationAPI>() }
 
     single { SharedPrefSettingsStorage(context = get()) as SettingsStorage }
-    single { SettingsRepositoryImpl(settingsStorage = get()) as SettingsRepository }
+
 
 }

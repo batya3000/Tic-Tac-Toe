@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import com.android.batya.tictactoe.domain.model.Turn
 
 import com.android.batya.tictactoe.domain.model.Result
-import com.android.batya.tictactoe.domain.model.User
 import com.android.batya.tictactoe.domain.repository.GameRepository
 import com.android.batya.tictactoe.util.Constants
 import com.android.batya.tictactoe.util.Constants.TURNS_REF
@@ -21,34 +20,27 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 
 class GameRepositoryImpl(
-    private val auth: FirebaseAuth,
     private val gamesReference: DatabaseReference
 ) : GameRepository {
-    private val userId = auth.currentUser!!.uid
-
-    override fun disconnect(roomId: String) {
-        gamesReference.child(roomId).child(Constants.CONNECTIONS_REF).child(userId).removeValue()
-
-    }
 
     override fun removeRoom(roomId: String) {
         gamesReference.child(roomId).removeValue()
 
     }
 
-    override fun getUsers(roomId: String): MutableLiveData<Result<List<User>>> {
-        val connectionsLiveData: MutableLiveData<Result<List<User>>> = MutableLiveData()
+    override fun getConnections(roomId: String): MutableLiveData<Result<List<String>>> {
+        val connectionsLiveData: MutableLiveData<Result<List<String>>> = MutableLiveData()
 
         gamesReference.child(roomId).child(Constants.CONNECTIONS_REF).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val users = mutableListOf<User>()
+                val users = mutableListOf<String>()
                 for (s in snapshot.children) {
-                    val user = s.getValue(User::class.java)
+                    val user = s.getValue(String::class.java)
                     if (user != null) {
                         users.add(user)
                     }
                 }
-                Log.d("TAG", "Get users(connections): ${users}")
+                Log.d("TAG", "Get users(connections): $users")
                 connectionsLiveData.value = Result.Success(users)
             }
             override fun onCancelled(error: DatabaseError) {

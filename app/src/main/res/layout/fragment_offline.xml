@@ -35,11 +35,11 @@
         app:zoomEnabled="true"
         app:flingEnabled="true"
         app:scrollEnabled="true"
-        app:minZoom="0.5"
+        app:minZoom="0.4"
         app:minZoomType="zoom"
-        app:maxZoom="2"
+        app:maxZoom="2.2"
         app:maxZoomType="zoom"
-        app:animationDuration="360"
+        app:animationDuration="380"
         app:hasClickableChildren="true">
 
         <com.android.batya.tictactoe.presentation.offline.TicTacToeViewOffline
@@ -69,7 +69,7 @@
                 android:id="@+id/cvTime"
                 style="@style/CardView.Primary"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="64dp"
                 android:layout_marginTop="26dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -79,27 +79,29 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center">
+
                     <ImageView
                         android:id="@+id/ivTime"
                         android:layout_width="26dp"
                         android:layout_height="26dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/ic_clock"
-                        android:backgroundTint="@color/primary" />
+                        android:backgroundTint="@color/primary2" />
+
                     <TextView
                         style="@style/Text.Button"
                         android:id="@+id/tvTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Матч длится "
-                        android:textColor="@color/primary" />
+                        android:textColor="@color/primary2" />
 
                     <Chronometer
                         android:id="@+id/chronometer"
                         style="@style/Text.Button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/primary"/>
+                        android:textColor="@color/primary2"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -121,7 +123,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Сейчас ходит крестик"
+                android:textColor="@color/primary2"
+                tools:text=""
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvPause" />
@@ -149,7 +152,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Победили крестики!"
-                    android:textColor="@color/primary"
+                    android:textColor="@color/primary2"
                     android:textSize="23sp"
                     android:layout_marginTop="6dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -166,6 +169,7 @@
             android:layout_marginBottom="26dp"
             android:orientation="horizontal"
             android:elevation="0dp"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -284,7 +288,7 @@
                 android:id="@+id/bnContinue"
                 style="@style/CardView.Primary"
                 android:layout_width="match_parent"
-                android:layout_height="62dp"
+                android:layout_height="64dp"
                 android:layout_marginBottom="10dp">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -322,7 +326,7 @@
                 android:id="@+id/bnRerun"
                 style="@style/CardView.Primary"
                 android:layout_width="match_parent"
-                android:layout_height="62dp"
+                android:layout_height="64dp"
                 android:layout_marginBottom="10dp">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -357,7 +361,7 @@
                 android:id="@+id/bnMainMenu"
                 style="@style/CardView.Secondary"
                 android:layout_width="match_parent"
-                android:layout_height="62dp">
+                android:layout_height="64dp">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

@@ -47,7 +47,8 @@ class TicTacToeViewOnline(
 
     var actionListener: OnCellClickedListener? = null
 
-    private var isDarkTheme by Delegates.notNull<Boolean>()
+    private var isLightTheme by Delegates.notNull<Boolean>()
+
     private var gridColor by Delegates.notNull<Int>()
     private var winColor by Delegates.notNull<Int>()
 
@@ -160,7 +161,6 @@ class TicTacToeViewOnline(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-
         if (field == null) return
         if (cellSize == 0f) return
         if (fieldRect.width() <= 0) return
@@ -268,12 +268,12 @@ class TicTacToeViewOnline(
     private fun drawPlayer2(canvas: Canvas, row: Int, column: Int) {
         val cellRect = getCellRect(row, column)
 
-        if (isDarkTheme) {
-            player2dark.bounds = cellRect.toRect()
-            player2dark.draw(canvas)
-        } else {
+        if (isLightTheme) {
             player2.bounds = cellRect.toRect()
             player2.draw(canvas)
+        } else {
+            player2dark.bounds = cellRect.toRect()
+            player2dark.draw(canvas)
         }
 
     }
@@ -304,7 +304,7 @@ class TicTacToeViewOnline(
 
     private fun initAttributes(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
         val typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.TicTacToeView, defStyleAttr, defStyleRes)
-        isDarkTheme = typedArray.getBoolean(R.styleable.TicTacToeView_isDarkTheme, false)
+        isLightTheme = typedArray.getBoolean(R.styleable.TicTacToeView_isLightTheme, true)
         gridColor = typedArray.getColor(R.styleable.TicTacToeView_gridColor, GRID_DEFAULT_COLOR)
         winColor = typedArray.getColor(R.styleable.TicTacToeView_winColor, WIN_DEFAULT_COLOR)
 
@@ -312,7 +312,7 @@ class TicTacToeViewOnline(
     }
 
     private fun initDefaultColors() {
-        isDarkTheme = false
+        isLightTheme = true
         gridColor = GRID_DEFAULT_COLOR
         winColor = WIN_DEFAULT_COLOR
     }
@@ -354,6 +354,11 @@ class TicTacToeViewOnline(
 
     fun clearActionListeners() {
         actionListener = null
+    }
+
+    fun setTheme(isLightTheme: Boolean) {
+        this.isLightTheme = isLightTheme
+        invalidate()
     }
 
     companion object {

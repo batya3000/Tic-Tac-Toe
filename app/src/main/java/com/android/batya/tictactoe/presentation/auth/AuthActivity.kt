@@ -5,13 +5,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.android.batya.tictactoe.R
 import com.android.batya.tictactoe.databinding.ActivityAuthBinding
 import com.android.batya.tictactoe.domain.model.Result
 import com.android.batya.tictactoe.presentation.MainActivity
-import com.android.batya.tictactoe.util.Constants
 import com.android.batya.tictactoe.util.gone
 import com.android.batya.tictactoe.util.visible
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -21,6 +19,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AuthActivity : AppCompatActivity() {
@@ -44,9 +44,10 @@ class AuthActivity : AppCompatActivity() {
 
 
         if (authViewModel.isAuthenticated()) {
+            if (Firebase.auth.currentUser!!.photoUrl != null) {
+                authViewModel.updatePhoto(Firebase.auth.currentUser!!.photoUrl.toString())
+            }
             openMainActivity()
-        } else {
-            signInUsingGoogle()
         }
 
         binding.bnLoginGoogle.setOnClickListener {
@@ -68,13 +69,14 @@ class AuthActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
     }
 
-    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        Log.d("TAG", "launcher result = ${result.resultCode} ")
         if (result.resultCode == Activity.RESULT_OK) {
-            Log.d("TAG", "byyy")
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)
+
                 if (account != null) {
                     getGoogleAuthCredential(account)
                 }
@@ -84,12 +86,12 @@ class AuthActivity : AppCompatActivity() {
                 // Google Sign In failed, update UI appropriately
             }
         }
-        if (result.resultCode == Activity.RESULT_CANCELED) {
-            Toast.makeText(this, "Вход гостем", Toast.LENGTH_SHORT).show()
-            authViewModel.signInAnonymously()
-            observeUserLiveData()
-
-        }
+//        if (result.resultCode == Activity.RESULT_CANCELED) {
+//            Toast.makeText(this, "Вход гостем", Toast.LENGTH_SHORT).show()
+//            authViewModel.signInAnonymously()
+//            observeUserLiveData()
+//
+//        }
     }
 
     private fun signInUsingGoogle() {
@@ -113,11 +115,11 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun observeUserLiveData() {
-        authViewModel.authenticateUserLiveData.observe(this) { user ->
+        authViewModel.authenticatedUserLiveData.observe(this) { user ->
 
             when (user) {
                 is Result.Success -> {
-                    Log.d("TAG", "success: userId=${user.data}")
+                    Log.d("TAG", "success auth ${user.data}")
                     openMainActivity()
                     binding.progressBar.gone()
 

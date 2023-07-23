@@ -11,13 +11,16 @@ interface RoomRepository {
 
     fun createRoom(room: Room)
 
-    fun connect(roomId: String, user: User)
+    fun connect(roomId: String, userId: String)
 
-    fun disconnect(roomId: String, user: User)
+    fun disconnect(roomId: String, userId: String)
 
     fun updateIsRunning(roomId: String, isRunning: Boolean)
 
     fun removeRoom(roomId: String)
 
-    fun getRooms(): MutableLiveData<Result<List<Room>>>
+    fun getWaitingPool(): MutableLiveData<Result<List<User>>>
+//    fun getConnectingPool(): MutableLiveData<Result<List<User>>>
+
+
 }

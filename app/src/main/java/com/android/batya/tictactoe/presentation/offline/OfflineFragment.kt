@@ -17,8 +17,15 @@ import com.android.batya.tictactoe.R
 import com.android.batya.tictactoe.domain.model.Cell
 import com.android.batya.tictactoe.domain.model.Field
 import com.android.batya.tictactoe.databinding.FragmentOfflineBinding
+import com.android.batya.tictactoe.domain.model.UserStatus
+import com.android.batya.tictactoe.presentation.menu.UserViewModel
+import com.android.batya.tictactoe.presentation.settings.SettingsViewModel
 import com.android.batya.tictactoe.util.gone
+import com.android.batya.tictactoe.util.vibrateDevice
 import com.android.batya.tictactoe.util.visible
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OfflineFragment : Fragment(R.layout.fragment_offline) {
     private var _binding: FragmentOfflineBinding? = null
@@ -28,6 +35,11 @@ class OfflineFragment : Fragment(R.layout.fragment_offline) {
     private var timeWhenStopped: Long = 0
     private var isPaused = false
 
+    private val userViewModel by viewModel<UserViewModel>()
+    private val settingsViewModel by viewModel<SettingsViewModel>()
+    private var myId: String = ""
+    private var isVibrationOn = false
+    private var areCrossesFirst = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +57,8 @@ class OfflineFragment : Fragment(R.layout.fragment_offline) {
                 }
             }
         }
+        myId = Firebase.auth.currentUser!!.uid
+
 
         return binding.root
     }
@@ -56,6 +70,31 @@ class OfflineFragment : Fragment(R.layout.fragment_offline) {
         setBlur()
         initChronometer()
         startTimer()
+
+        settingsViewModel.loadSettings()
+        userViewModel.updateStatus(myId, UserStatus.IN_BATTLE)
+        observeTheme()
+        observeVibrations()
+        observeAreCrossesFirst()
+
+
+    }
+
+    private fun observeTheme() {
+        settingsViewModel.isLightMode.observe(viewLifecycleOwner) { isLightMode ->
+            binding.fieldView.setTheme(isLightMode)
+        }
+    }
+    private fun observeVibrations() {
+        settingsViewModel.isVibrationOn.observe(viewLifecycleOwner) { isVibrationOn ->
+            this@OfflineFragment.isVibrationOn = isVibrationOn
+        }
+    }
+    private fun observeAreCrossesFirst() {
+        settingsViewModel.areCrossesFirst.observe(viewLifecycleOwner) { areCrossesFirst ->
+            this@OfflineFragment.areCrossesFirst = areCrossesFirst
+            binding.fieldView.setFirstTurn(areCrossesFirst)
+        }
     }
 
     private fun initUI() {
@@ -94,6 +133,7 @@ class OfflineFragment : Fragment(R.layout.fragment_offline) {
                 binding.fieldView.rollbackLastMove()
                 setCurrentTurn()
             }
+            cvTime.setOnClickListener {  }
         }
     }
 
@@ -101,11 +141,11 @@ class OfflineFragment : Fragment(R.layout.fragment_offline) {
         val builder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
         builder.setTitle(title)
         builder.setMessage(message)
-        builder.setPositiveButton("Да") { dialog, which ->
+        builder.setPositiveButton("Да") { _, _ ->
             onPositiveClicked()
 
         }
-        builder.setNegativeButton("Нет") { dialog, which -> }
+        builder.setNegativeButton("Нет") { _, _ -> }
         builder.show()
     }
     private fun initChronometer() {
@@ -152,11 +192,12 @@ class OfflineFragment : Fragment(R.layout.fragment_offline) {
                     binding.fieldView.lastMovePlayer2 += Pair(row, column)
                     setCurrentTurn(TURN.PLAYER_1)
                 }
+                if (isVibrationOn) vibrateDevice(requireContext(), 50L)
 
                 winner = field.checkWinnerOffline(row, column)
                 if (winner != Cell.EMPTY) {
                     binding.fieldView.drawWinLine = true
-
+                    if (isVibrationOn) vibrateDevice(requireContext(), 250L)
                     winMode()
                 }
 
@@ -165,7 +206,13 @@ class OfflineFragment : Fragment(R.layout.fragment_offline) {
     }
     private fun setCurrentTurn(turn: TURN = getCurrentTurn()) {
         binding.fieldView.currentTurn = turn
-        val turnString = if (turn == TURN.PLAYER_1) "крестик" else "нолик"
+        val turnString = if (turn == TURN.PLAYER_1) {
+            if (areCrossesFirst) "крестик"
+            else "нолик"
+        } else {
+            if (areCrossesFirst) "нолик"
+            else "крестик"
+        }
         binding.tvTurn.text = "Сейчас ходит $turnString"
     }
     private fun getCurrentTurn(): TURN {
@@ -239,7 +286,15 @@ class OfflineFragment : Fragment(R.layout.fragment_offline) {
             bnNext.visible()
 
             layoutEndTextViews.visible()
-            val winnerString = if (winner == Cell.PLAYER_1) "крестики" else "нолики"
+
+            val winnerString = if (winner == Cell.PLAYER_1) {
+                if (areCrossesFirst) "крестики"
+                else "нолики"
+            } else {
+                if (areCrossesFirst) "нолики"
+                else "крестики"
+            }
+
             tvWinner.text = "Победили $winnerString!"
 
                 //tvPause.text = "Матч окончен"
@@ -267,5 +322,11 @@ class OfflineFragment : Fragment(R.layout.fragment_offline) {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        userViewModel.updateStatus(myId, UserStatus.ONLINE)
     }
 }

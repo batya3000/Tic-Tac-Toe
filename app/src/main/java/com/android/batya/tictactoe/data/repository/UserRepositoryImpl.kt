@@ -1,5 +1,6 @@
 package com.android.batya.tictactoe.data.repository
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.android.batya.tictactoe.domain.model.Game
@@ -11,11 +12,16 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
 import com.android.batya.tictactoe.domain.model.Result
+import com.android.batya.tictactoe.domain.model.UserStatus
 import com.android.batya.tictactoe.util.Constants.USER_ACCOUNT_TYPE_REF
 import com.android.batya.tictactoe.util.Constants.USER_FRIENDS_REF
 import com.android.batya.tictactoe.util.Constants.USER_GAMES_REF
 import com.android.batya.tictactoe.util.Constants.USER_NAME_REF
+import com.android.batya.tictactoe.util.Constants.USER_PHOTO_REF
 import com.android.batya.tictactoe.util.Constants.USER_POINTS_REF
+import com.android.batya.tictactoe.util.Constants.USER_ROOM_CONNECTED_REF
+import com.android.batya.tictactoe.util.Constants.USER_STATUS_REF
+import com.android.batya.tictactoe.util.Constants.USER_TOKEN_REF
 
 class UserRepositoryImpl(
     private val usersReference: DatabaseReference
@@ -25,12 +31,28 @@ class UserRepositoryImpl(
     override fun updateUserName(userId: String, name: String) {
         usersReference.child(userId).updateChildren(mapOf(USER_NAME_REF to name))
     }
+
+
     override fun updatePoints(userId: String, points: Int) {
         usersReference.child(userId).updateChildren(mapOf(USER_POINTS_REF to points))
     }
 
     override fun updateAccountType(userId: String, isAnonymousAccount: Boolean) {
         usersReference.child(userId).updateChildren(mapOf(USER_ACCOUNT_TYPE_REF to isAnonymousAccount))
+
+    }
+
+    override fun updateStatus(userId: String, userStatus: UserStatus) {
+        usersReference.child(userId).updateChildren(mapOf(USER_STATUS_REF to userStatus))
+    }
+
+    override fun updateToken(userId: String, token: String) {
+        usersReference.child(userId).updateChildren(mapOf(USER_TOKEN_REF to token))
+
+    }
+
+    override fun updateRoomConnected(userId: String, roomId: String?) {
+        usersReference.child(userId).updateChildren(mapOf(USER_ROOM_CONNECTED_REF to roomId))
 
     }
 
@@ -79,9 +101,10 @@ class UserRepositoryImpl(
                 for (s in snapshot.children) {
 
                     val user = s.getValue(User::class.java)
-
-                    if (user != null && (query.lowercase() in user.name.lowercase() || query.lowercase() in user.id.lowercase())) {
+                    if (user != null && (query.lowercase() in user.name.lowercase())) {
+                    //if (user != null && (query.lowercase() in user.name.lowercase() || query.lowercase() in user.id.lowercase())) {
                         users.add(user)
+                    //}
                     }
                 }
                 usersLiveData.value = Result.Success(users)

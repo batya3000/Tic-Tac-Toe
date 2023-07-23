@@ -1,9 +1,8 @@
 package com.android.batya.tictactoe.data.api
 
+import com.android.batya.tictactoe.BuildConfig.SERVER_KEY
 import com.android.batya.tictactoe.domain.model.PushNotification
-import com.android.batya.tictactoe.util.Constants
 import com.android.batya.tictactoe.util.Constants.CONTENT_TYPE
-import com.android.batya.tictactoe.util.Constants.SERVER_KEY
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body

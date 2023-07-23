@@ -16,7 +16,7 @@
             android:id="@+id/layoutTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -26,8 +26,8 @@
                 android:transitionName="profileTransition"
                 style="@style/CardView.Secondary"
                 android:layout_width="match_parent"
-                android:layout_height="46dp"
-                app:cardCornerRadius="22dp"
+                android:layout_height="50dp"
+                app:cardCornerRadius="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -36,16 +36,57 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/ivPerson"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="18dp"
-                        android:background="@drawable/ic_person"
+                    <androidx.cardview.widget.CardView
+                        style="@style/CardView.Primary"
+                        android:id="@+id/cvOpenProfile"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="8dp"
+                        android:visibility="gone"
+                        android:background="@android:color/transparent"
+                        app:cardCornerRadius="50dp"
+                        app:cardBackgroundColor="#29FFFFFF"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent" >
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_charts_rounded"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        style="@style/CardView.Primary"
+                        android:id="@+id/cvPhoto"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@android:color/transparent"
+                        app:cardCornerRadius="50dp"
+                        app:cardBackgroundColor="@android:color/transparent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cvOpenProfile"
+                        app:layout_constraintTop_toTopOf="parent" >
+
+                        <ImageView
+                            android:id="@+id/ivPhoto"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            tools:src="@drawable/ic_photo"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.cardview.widget.CardView>
 
                     <TextView
                         android:id="@+id/tvNickname"
@@ -56,7 +97,7 @@
                         android:text="loading..."
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/ivPerson"
+                        app:layout_constraintStart_toEndOf="@+id/cvPhoto"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.cardview.widget.CardView
@@ -92,11 +133,11 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="6dp"
-                                tools:text="5628"
                                 android:textColor="@color/white"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/ivCrown"
-                                app:layout_constraintTop_toTopOf="parent"/>
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:text="5628" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -143,7 +184,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
                         android:layout_marginVertical="7dp"
-                        android:text="На большом поле"
+                        android:text="Большое поле"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -197,14 +238,15 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         android:text="Одно устройство"
-                        android:textColor="@color/primary"/>
+                        android:textSize="19sp"
+                        android:textColor="@color/primary2"/>
 
                     <ImageView
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:layout_marginEnd="26dp"
                         android:background="@drawable/ic_persons"
-                        android:backgroundTint="@color/primary"
+                        android:backgroundTint="@color/primary2"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -237,6 +279,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         android:text="Онлайн игра"
+                        android:textSize="19sp"
                         android:textColor="@color/white"/>
 
                     <ImageView
@@ -286,7 +329,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="15dp"
                         android:background="@drawable/ic_help"
-                        android:backgroundTint="@color/primary"/>
+                        android:backgroundTint="@color/primary2"/>
                 </androidx.cardview.widget.CardView>
 
                 <TextView
@@ -330,7 +373,7 @@
                             android:layout_height="match_parent"
                             android:layout_margin="15dp"
                             android:background="@drawable/ic_friends"
-                            android:backgroundTint="@color/primary"
+                            android:backgroundTint="@color/primary2"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -393,7 +436,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="15dp"
                         android:background="@drawable/ic_settings"
-                        android:backgroundTint="@color/primary"/>
+                        android:backgroundTint="@color/primary2"/>
                 </androidx.cardview.widget.CardView>
 
                 <TextView

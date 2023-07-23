@@ -35,11 +35,11 @@
         app:zoomEnabled="true"
         app:flingEnabled="true"
         app:scrollEnabled="true"
-        app:minZoom="0.5"
+        app:minZoom="0.4"
         app:minZoomType="zoom"
-        app:maxZoom="2"
+        app:maxZoom="2.2"
         app:maxZoomType="zoom"
-        app:animationDuration="360"
+        app:animationDuration="380"
         app:hasClickableChildren="true">
 
         <com.android.batya.tictactoe.presentation.online.TicTacToeViewOnline
@@ -97,25 +97,37 @@
                         android:background="@drawable/gradient_yellow"
                         android:gravity="center">
 
-                        <ImageView
-                            android:id="@+id/ivPerson"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:background="@drawable/ic_person"
-                            android:backgroundTint="@color/white"
-                            android:layout_marginStart="14dp"
+                        <androidx.cardview.widget.CardView
+                            style="@style/CardView.Primary"
+                            android:id="@+id/cvPhoto"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_marginStart="12dp"
+                            android:background="@android:color/transparent"
+                            app:cardCornerRadius="50dp"
+                            app:cardBackgroundColor="@android:color/transparent"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent" >
+
+                            <ImageView
+                                android:id="@+id/ivPhoto"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                tools:src="@drawable/ic_photo"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.cardview.widget.CardView>
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:layout_marginStart="10dp"
-                            android:layout_marginTop="2dp"
+                            android:layout_marginTop="3dp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/ivPerson"
+                            app:layout_constraintStart_toEndOf="@+id/cvPhoto"
                             app:layout_constraintTop_toTopOf="parent">
 
                             <TextView
@@ -131,15 +143,16 @@
                                 android:orientation="horizontal"
                                 android:gravity="center_vertical"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/ivPerson"
+                                app:layout_constraintStart_toEndOf="@+id/ivPhoto"
                                 app:layout_constraintTop_toTopOf="parent">
+
                                 <TextView
                                     android:id="@+id/tvEnemyName"
                                     style="@style/Text.Button"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginBottom="2dp"
-                                    android:text="User1" />
+                                    tools:text="User1" />
 
                                 <androidx.cardview.widget.CardView
                                     android:id="@+id/cvCrowns"
@@ -174,7 +187,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginStart="6dp"
-                                            android:text="12"
+                                            tools:text="12"
                                             android:textColor="@color/white"
                                             app:layout_constraintBottom_toBottomOf="parent"
                                             app:layout_constraintStart_toEndOf="@+id/ivCrown"
@@ -244,7 +257,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3.3"
-                    android:text="Ваш ход"/>
+                    android:text="Ваш ход"
+                    android:textColor="@color/primary2"/>
                 <com.google.android.material.progressindicator.LinearProgressIndicator
                     style="@style/ProgressBarTurnStyle"
                     android:id="@+id/progressBar"
@@ -259,10 +273,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    tools:text="00:16"
+                    tools:text="01:00"
                     android:textAlignment="textEnd"
                     android:layout_marginStart="20dp"
-                    android:textColor="@color/primary"/>
+                    android:textColor="@color/primary2"/>
             </LinearLayout>
 
             <LinearLayout
@@ -271,7 +285,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/layoutTurn" >
@@ -318,7 +332,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="12dp"
-                            android:text="+12"
+                            tools:text="+12"
                             android:textColor="@color/white"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -369,14 +383,14 @@
                         android:layout_height="26dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/ic_clock"
-                        android:backgroundTint="@color/primary" />
+                        android:backgroundTint="@color/primary2" />
                     <TextView
                         style="@style/Text.Button"
                         android:id="@+id/tvTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Матч длится ..."
-                        android:textColor="@color/primary" />
+                        android:textColor="@color/primary2" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -416,7 +430,7 @@
                 android:id="@+id/bnContinue"
                 style="@style/CardView.Primary"
                 android:layout_width="match_parent"
-                android:layout_height="62dp"
+                android:layout_height="64dp"
                 android:layout_marginBottom="10dp">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -454,7 +468,7 @@
                 android:id="@+id/bnSurrender"
                 style="@style/CardView.Secondary"
                 android:layout_width="match_parent"
-                android:layout_height="62dp">
+                android:layout_height="64dp">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -501,7 +515,7 @@
                 android:id="@+id/bnMainMenu"
                 style="@style/CardView.Secondary"
                 android:layout_width="match_parent"
-                android:layout_height="62dp">
+                android:layout_height="64dp">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

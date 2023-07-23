@@ -9,20 +9,26 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat.getColor
+import androidx.core.os.bundleOf
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import coil.load
 import com.android.batya.tictactoe.R
 import com.android.batya.tictactoe.databinding.DialogNicknameBinding
 import com.android.batya.tictactoe.databinding.FragmentProfileBinding
+import com.android.batya.tictactoe.domain.model.BattleInvitation
 import com.android.batya.tictactoe.domain.model.Result
+import com.android.batya.tictactoe.domain.model.Room
 import com.android.batya.tictactoe.domain.model.User
+import com.android.batya.tictactoe.presentation.BattleInvitationsViewModel
 import com.android.batya.tictactoe.presentation.auth.AuthActivity
 import com.android.batya.tictactoe.presentation.menu.UserViewModel
 import com.android.batya.tictactoe.util.Constants
+import com.android.batya.tictactoe.util.getStatusColor
 import com.android.batya.tictactoe.util.gone
 import com.android.batya.tictactoe.util.toast
 import com.android.batya.tictactoe.util.visible
@@ -40,11 +46,18 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+
+    private val profileViewModel by viewModel<ProfileViewModel>()
     private val userViewModel by viewModel<UserViewModel>()
+    private val invitationsViewModel by viewModel<BattleInvitationsViewModel>()
+    private val notificationsViewModel by viewModel<NotificationsViewModel>()
 
     private lateinit var googleSignInClient: GoogleSignInClient
     private var isMyProfile = false
     private var currentUser: User? = null
+    private var users: List<User> = listOf()
+    private var me: User? = null
+
     private var myId: String = ""
     private var userId: String? = null
 
@@ -66,14 +79,39 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         setOnClickListeners()
 
-        userViewModel.getUser(userId ?: myId)
-        observeUserLiveData()
+        if (userId != null) {
+            profileViewModel.getProfile(userId!!)
+            observeOpenedProfileLiveData()
+            userViewModel.getUser(myId)
+            observeUserLiveData()
+        } else {
+            profileViewModel.getProfile(myId)
+            observeOpenedProfileLiveData()
+        }
+        profileViewModel.getUsers()
+        observeUsers()
 
         postponeEnterTransition()
 
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move).apply {
             duration = 100
         }
+    }
+
+    private fun observeUsers() {
+        profileViewModel.usersLiveData.observe(viewLifecycleOwner) { users ->
+            when (users) {
+                is Result.Success -> {
+                    this@ProfileFragment.users = users.data
+                    if (currentUser != null) {
+                        updateUI(currentUser!!, currentUser!!.id == myId)
+                    }
+
+                }
+                is Result.Failure -> {}
+            }
+        }
+
     }
 
     private fun setOnClickListeners() {
@@ -92,13 +130,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             linkWithGoogle()
         }
         binding.cvRemoveFriend.setOnClickListener {
-            userViewModel.removeFriend(myId, currentUser!!.id)
+            profileViewModel.removeFriend(myId, currentUser!!.id)
         }
         binding.cvEdit.setOnClickListener {
             if (currentUser?.isAnonymousAccount == false) {
                 showEditTextDialog() {
                     if (it.length in 4..15) {
-                        userViewModel.updateUserName(myId, it)
+                        profileViewModel.updateUserName(myId, it)
                     } else {
                         requireContext().toast("Ник должен быть длиной от 4 до 15 символов")
                     }
@@ -107,14 +145,40 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 Toast.makeText(context, "Для изменения ника вы должны войти в Google", Toast.LENGTH_SHORT).show()
             }
         }
+
+
+        binding.cvBattle.setOnClickListener {
+            val room = Room()
+            val invitation = BattleInvitation(
+                roomId = room.id,
+                fromName = me!!.name,
+                fromId = me!!.id,
+                toId = currentUser?.id ?: "",
+                toToken = currentUser?.token ?: "",
+            )
+            if (me != null) {
+                invitationsViewModel.sendInvitation(battleInvitation = invitation)
+
+                Log.d("TAG", "sending invitation ${room.id}")
+                findNavController().navigate(
+                    R.id.action_profileFragment_to_waitingFragment,
+                    bundleOf(Constants.ARG_ROOM_ID to room.id)
+                )
+            }
+
+            notificationsViewModel.sendNotification(
+                fromName = invitation.fromName,
+                toToken = invitation.toToken
+            )
+        }
     }
 
-    private fun observeUserLiveData() {
-        userViewModel.userLiveData.observe(viewLifecycleOwner) { user ->
+    private fun observeOpenedProfileLiveData() {
+        profileViewModel.profileLiveData.observe(viewLifecycleOwner) { user ->
             when (user) {
                 is Result.Success -> {
                     Log.d("TAG", "success: userId=${user.data.id}")
-                    isMyProfile = user.data.id == Firebase.auth.currentUser!!.uid
+                    isMyProfile = user.data.id == myId
                     currentUser = user.data
                     updateUI(user.data, isMyProfile)
                 }
@@ -129,6 +193,20 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                         tvVictories.text = "0"
                         tvDefeats.text = "0"
                     }
+                }
+            }
+        }
+    }
+
+    private fun observeUserLiveData() {
+        userViewModel.userLiveData.observe(viewLifecycleOwner) { user ->
+            when (user) {
+                is Result.Success -> {
+                    Log.d("TAG", "success: userId=${user.data.id}")
+                    me = user.data
+                }
+                is Result.Failure -> {
+                    Log.d("TAG", "failure log in: ${user.error}")
                 }
             }
         }
@@ -158,7 +236,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             startPostponedEnterTransition()
         }
         with(binding) {
-            tvCrowns.text = user.points.toString()
             tvGames.text = user.games.size.toString()
             tvVictories.text = user.games.filter { it.value.winnerId == user.id }.size.toString()
             tvDefeats.text = user.games.filter { it.value.winnerId != user.id }.size.toString()
@@ -166,9 +243,19 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             tvNickname.text = user.name
             tvId.text = "ID: ${user.id.take(6)}"
 
+            ivStatus.setImageResource(getStatusColor(currentUser!!.status))
+
+            tvCrowns.text = user.points.toString()
+            tvRatingInWorld.text = "#${users.sortedByDescending { it.points }.indexOf(user) + 1}"
+            if (user.photoUri != null) {
+                ivPhoto.load(user.photoUri)
+            }
+
+
             if (isMyProfile) {
                 cvSignOut.visible()
                 cvEdit.visible()
+                cvBattle.gone()
                 if (user.isAnonymousAccount) {
                     cvLinkWithGoogle.visible()
                     cvFriends.gone()
@@ -179,15 +266,19 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     cvFriends.visible()
                     tvId.visible()
                 }
+                clRatingInFriends.visible()
+                tvRatingInFriends.text = "#${users.filter { it.id in user.friends.values || it.id == user.id}.sortedByDescending { it.points }.indexOf(user) + 1}"
             } else {
                 cvSignOut.gone()
+                cvEdit.gone()
                 cvFriends.gone()
+                cvBattle.visible()
                 if (myId in user.friends) {
                     cvRemoveFriend.visible()
                 } else {
                     cvRemoveFriend.gone()
                 }
-                cvEdit.gone()
+                clRatingInFriends.gone()
             }
         }
     }
@@ -204,7 +295,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            Log.d("TAG", "byyy")
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
             try {
                 // Google Sign In was successful, authenticate with Firebase
@@ -241,8 +331,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 if (task.isSuccessful) {
                     Log.d("TAG", "linkWithCredential:success")
                     val user = task.result?.user
-                    //updateUI(user)
-                    userViewModel.updateAccountType(user!!.uid, isAnonymousAccount = false)
+
+                    profileViewModel.updateAccountType(user!!.uid, isAnonymousAccount = false)
                 } else {
                     Log.w("TAG", "linkWithCredential:failure", task.exception)
                 }

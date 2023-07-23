@@ -8,12 +8,21 @@
 
 
     <color name="primary">#3968DF</color>
+    <color name="primary2">#1475F6</color>
     <color name="primary_variant">#B9EAFB</color>
     <color name="primary_shadow">#0031AC</color>
+
+    <color name="trackColor">#333968DF</color>
+    <color name="trackEnemyTurnColor">#33F06C4F</color>
 
     <color name="secondary">#F06C4F</color>
     <color name="secondary_shadow">#9F0020</color>
     <color name="gray">#B9EAFB</color>
+
+    <color name="status_online">#A8FF80</color>
+    <color name="status_offline">#DDDDDD</color>
+    <color name="status_waiting">#FFDE8B</color>
+    <color name="status_battle">#FF411F</color>
 
     <color name="black">#000000</color>
     <color name="white">#FFFFFFFF</color>

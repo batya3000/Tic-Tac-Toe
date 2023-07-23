@@ -12,8 +12,8 @@ class SettingsRepositoryImpl(private val settingsStorage: SettingsStorage) : Set
         settingsStorage.saveIsLightMode(isLightMode)
     }
 
-    override fun saveAreSoundsOn(areSoundsOn: Boolean) {
-        settingsStorage.saveAreSoundsOn(areSoundsOn)
+    override fun saveIsVibrationOn(isVibrationOn: Boolean) {
+        settingsStorage.saveIsVibrationOn(isVibrationOn)
     }
 
     override fun getAreCrossesFirst(): Boolean {
@@ -24,8 +24,8 @@ class SettingsRepositoryImpl(private val settingsStorage: SettingsStorage) : Set
         return settingsStorage.getIsLightMode()
     }
 
-    override fun getAreSoundsOn(): Boolean {
-        return settingsStorage.getAreSoundsOn()
+    override fun getIsVibrationOn(): Boolean {
+        return settingsStorage.getIsVibrationOn()
     }
 
 }

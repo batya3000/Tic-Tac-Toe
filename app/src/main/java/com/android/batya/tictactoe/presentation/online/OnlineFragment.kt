@@ -1,10 +1,14 @@
 package com.android.batya.tictactoe.presentation.online
 
+import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.graphics.RenderEffect
 import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,22 +16,28 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
+import androidx.core.content.ContextCompat.getColor
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import coil.load
 import com.android.batya.tictactoe.R
 import com.android.batya.tictactoe.databinding.FragmentOnlineBinding
 import com.android.batya.tictactoe.domain.model.*
 import com.android.batya.tictactoe.presentation.friends.viewmodel.FriendInvitationsViewModel
 import com.android.batya.tictactoe.presentation.offline.OnCellClickedListener
-import com.android.batya.tictactoe.presentation.online.viewmodel.UsersViewModel
 import com.android.batya.tictactoe.presentation.online.viewmodel.PlayerViewModel
 import com.android.batya.tictactoe.presentation.online.viewmodel.TimeViewModel
 import com.android.batya.tictactoe.presentation.online.viewmodel.TurnsViewModel
+import com.android.batya.tictactoe.presentation.online.viewmodel.UsersViewModel
+import com.android.batya.tictactoe.presentation.settings.SettingsViewModel
 import com.android.batya.tictactoe.util.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
+import kotlin.concurrent.thread
 import kotlin.math.pow
 
 
@@ -38,17 +48,14 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
     private val usersViewModel by viewModel<UsersViewModel>()
     private val turnsViewModel by viewModel<TurnsViewModel>()
     private val playerViewModel by viewModel<PlayerViewModel>()
-//    private val userViewModel by viewModel<UserViewModel>()
     private val timeViewModel by viewModel<TimeViewModel>()
     private val invitationsViewModel by viewModel<FriendInvitationsViewModel>()
+    private val settingsViewModel by viewModel<SettingsViewModel>()
 
+    private var me: User? = null
+    private var enemy: User? = null
 
     private var myId: String = ""
-    private var myName: String = ""
-    private var myPoints: Int = 0
-
-    private var enemyId: String? = null
-    private var enemyPoints: Int = 0
 
     private var actionListener: OnCellClickedListener? = null
     private var winnerId: String = ""
@@ -59,7 +66,9 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
 
 
     private var isMyTurn: Boolean = true
-    private var connections = listOf<String>()
+    private var isPrivate: Boolean = false
+    private var isVibrationOn = false
+
     private var roomId: String = ""
     private lateinit var timer: Timer
 
@@ -75,7 +84,9 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
     ): View {
         _binding = FragmentOnlineBinding.inflate(inflater, container, false)
 
-        roomId = arguments?.getString(Constants.ROOMS_REF).toString()
+        roomId = arguments?.getString(Constants.ARG_ROOM_ID).toString()
+        isPrivate = arguments?.getBoolean(Constants.ARG_ROOM_PRIVATE) ?: false
+
         myId = Firebase.auth.currentUser!!.uid
 
         return binding.root
@@ -83,13 +94,25 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        startMatch()
+//        if (isNetworkAvailable(requireContext())) {
+//
+//        } else {
+//
+//        }
+
+        initCallback()
+        initUI()
+
+        createField()
+        usersViewModel.getConnections(roomId)
+        usersViewModel.updateStatus(myId, UserStatus.IN_BATTLE)
+        observeConnections()
+
     }
     private fun startMatch() {
         winnerId = ""
-        initCallback()
-        initUI()
-        createField()
+
+        //createField()
         setBlur()
         initTimer()
         initViewModels()
@@ -107,7 +130,7 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
     }
 
     private fun timerTask() {
-        timeViewModel.setTimestamp(roomId)
+        if (winnerId == "") timeViewModel.setTimestamp(roomId)
         val duration = Date(timestamp).time - Date(matchStartTime).time
 
         binding.tvTime.text = "Матч длится ${timeToString(duration)}"
@@ -129,22 +152,21 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
     }
 
     private fun initViewModels() {
-        usersViewModel.getConnections(roomId)
+
         turnsViewModel.getLastTurn(roomId)
         turnsViewModel.getTurns(roomId)
         turnsViewModel.getWinner(roomId)
         playerViewModel.getFirstTurnPlayer(roomId)
         playerViewModel.getCurrentPlayer(roomId)
-//        userViewModel.getUser(myId)
-
 
         timeViewModel.getTimestamp(roomId)
         timeViewModel.getMatchStartTime(roomId)
         timeViewModel.getCurrentTurnStartTime(roomId)
+
+        settingsViewModel.loadSettings()
     }
 
     private fun initObservers() {
-        observeConnections()
         observeTurns()
         observeLastTurn()
         observeFirstPlayerTurn()
@@ -154,6 +176,20 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
         observeStartTime()
         observeTimestamp()
         observeCurrentTurnStartLiveData()
+
+        observeTheme()
+        observeVibrations()
+    }
+
+    private fun observeTheme() {
+        settingsViewModel.isLightMode.observe(viewLifecycleOwner) { isLightMode ->
+            binding.fieldView.setTheme(isLightMode)
+        }
+    }
+    private fun observeVibrations() {
+        settingsViewModel.isVibrationOn.observe(viewLifecycleOwner) { isVibrationOn ->
+            this@OnlineFragment.isVibrationOn = isVibrationOn
+        }
     }
 
     private fun observeStartTime() {
@@ -180,9 +216,9 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
 
                     if (timestamp != 0L && currentTurnStartTime != 0L && Date(timestamp - currentTurnStartTime).toInstant().epochSecond >= 60) {
                         if (currentPlayer == myId) {
-                            turnsViewModel.setWinner(roomId, enemyId!!)
+                            turnsViewModel.setWinner(roomId, enemy!!.id)
                         } else {
-                            turnsViewModel.setWinner(roomId, myId)
+                            turnsViewModel.setWinner(roomId, me!!.id)
                         }
                     }
                 }
@@ -220,21 +256,31 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
             bnContinue.setOnClickListener {
                 gameMode(isMyTurn)
             }
+            cvTime.setOnClickListener {  }
+            cvEnemy.setOnClickListener {
+//                turnsViewModel.setCell(
+//                    roomId = roomId,
+//                    turn = Turn(
+//                        playerId = myId,
+//                        row = 12,
+//                        column = 12
+//                    )
+//                )
+            }
 
             bnMainMenu.setOnClickListener {
                 if (winnerId == "") {
                     buildAlertDialog("Предупреждение", "Вы действительно хотите выйти в меню?") {
-                        usersViewModel.disconnect(roomId)
                         findNavController().navigate(R.id.action_onlineFragment_to_menuFragment)
                     }
                 } else {
-                    usersViewModel.disconnect(roomId)
                     findNavController().navigate(R.id.action_onlineFragment_to_menuFragment)
                 }
             }
             bnSurrender.setOnClickListener {
                 buildAlertDialog("Предупреждение", "Вы действительно хотите сдаться?") {
-                    turnsViewModel.setWinner(roomId, enemyId!!)
+                    if (winnerId == "" && enemy != null) turnsViewModel.setWinner(roomId, enemy!!.id)
+                    if (enemy == null) findNavController().navigate(R.id.action_onlineFragment_to_menuFragment)
                 }
             }
 
@@ -274,6 +320,9 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
                         )
                     }
                     binding.fieldView.field = field
+                    if (isVibrationOn) vibrateDevice(requireContext(), 50L)
+
+                    Log.d("TAG", "observeTurns: ${turns.data}")
                     if (field.hasWinner) {
                         binding.fieldView.drawWinLine = true
                     }
@@ -291,9 +340,7 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
                 is Result.Success -> {
                     binding.fieldView.lastTurn = Pair(lastTurn.data.row, lastTurn.data.column)
                 }
-                is Result.Failure -> {
-                    //
-                }
+                is Result.Failure -> {}
             }
         }
     }
@@ -302,37 +349,33 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
         usersViewModel.usersLiveData.observe(viewLifecycleOwner) { users ->
             when (users) {
                 is Result.Success -> {
-                    if (users.data.isNotEmpty()) {
+                    val connections = users.data
+                    if (connections.isNotEmpty()) {
                         if (firstPlayer == null) {
-                            firstPlayer = users.data.map { it.id }.random()
-                            playerViewModel.setFirstTurnPlayer(roomId, firstPlayer!!)
+                            playerViewModel.setFirstTurnPlayer(roomId, connections.random())
                         }
+                        thread {
+                            Thread.sleep(1350)
 
+                            if (firstPlayer == null) {
+                                activity?.runOnUiThread {
+                                    if (findNavController().currentDestination?.id == R.id.onlineFragment) {
+                                        requireContext().toast("Попробуйте еще раз")
+                                        findNavController().navigate(R.id.action_onlineFragment_to_menuFragment)
+                                    }
+                                }
 
-                        if (users.data.size == 1) {
-                            Toast.makeText(context, "Противник покинул матч.", Toast.LENGTH_SHORT).show()
-                            if (winnerId == "") turnsViewModel.setWinner(roomId, myId)
-                            usersViewModel.removeRoom(roomId)
+                            }
                         }
+                        if (connections.size == 2) {
+                            usersViewModel.getMe(myId)
+                            usersViewModel.getEnemy(connections.first { it != myId })
 
-                        if (users.data.size == 2) {
-                            val enemy = users.data.filter { it.id != myId }[0]
-                            enemyId = enemy.id
-                            enemyPoints = enemy.points
-                            if (enemy.isAnonymousAccount) binding.tvEnemyName.text = getString(R.string.quest)
-                            else binding.tvEnemyName.text = enemy.name
-                            binding.tvEnemyPoints.text = enemyPoints.toString()
-                            Log.d("TAG", "observeConnections: enemyId: $enemyId")
-
-                            val me = users.data.filter { it.id == myId }[0]
-                            myName = me.name
-                            myPoints = me.points
-
-                            invitationsViewModel.getOutgoingInvitations(myId)
-                            observeInvitations(me, enemy)
+                            observeMe()
+                            observeEnemy()
+                            startMatch()
                         }
                     }
-                    this@OnlineFragment.connections = users.data.map { it.id }
                 }
                 is Result.Failure -> {
                     Toast.makeText(context, "Error observeConnections", Toast.LENGTH_SHORT).show()
@@ -340,6 +383,50 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
             }
         }
     }
+
+
+
+    private fun observeMe() {
+        usersViewModel.meLiveData.observe(viewLifecycleOwner) { user ->
+            when (user) {
+                is Result.Success -> {
+                    me = user.data
+
+                    observeEnemy()
+                }
+                is Result.Failure -> {}
+            }
+        }
+    }
+
+    private fun observeEnemy() {
+        usersViewModel.enemyLiveData.observe(viewLifecycleOwner) { user ->
+            when (user) {
+                is Result.Success -> {
+                    enemy = user.data
+
+
+
+                    if (enemy!!.isAnonymousAccount) binding.tvEnemyName.text = getString(R.string.quest)
+                    else binding.tvEnemyName.text = enemy!!.name
+                    binding.tvEnemyPoints.text = enemy!!.points.toString()
+                    Log.d("TAG", "observeConnections: enemyId: ${enemy!!.id}")
+                    if (enemy!!.photoUri != null) {
+                        binding.ivPhoto.load(user.data.photoUri)
+                    } else {
+                        binding.ivPhoto.setImageResource(R.drawable.ic_photo)
+                    }
+
+
+                    invitationsViewModel.getOutgoingInvitations(me!!.id)
+                    observeInvitations(me!!, enemy!!)
+
+                }
+                is Result.Failure -> {}
+            }
+        }
+    }
+
 
     private fun observeInvitations(me: User, enemy: User) {
         invitationsViewModel.invitesLiveData.observe(viewLifecycleOwner) { invitations ->
@@ -387,9 +474,17 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
                     if (currentPlayer == myId) {
                         isMyTurn = true
                         binding.tvTurn.text = "Ваш ход"
+                        binding.tvTurn.setTextColor(getColor(requireContext(), R.color.primary2))
+                        binding.tvTurnTime.setTextColor(getColor(requireContext(), R.color.primary2))
+                        binding.progressBar.setIndicatorColor(getColor(requireContext(), R.color.primary2))
+                        binding.progressBar.trackColor = getColor(requireContext(), R.color.trackColor)
                     } else {
                         isMyTurn = false
                         binding.tvTurn.text = "Ход врага"
+                        binding.tvTurn.setTextColor(getColor(requireContext(), R.color.secondary))
+                        binding.tvTurnTime.setTextColor(getColor(requireContext(), R.color.secondary))
+                        binding.progressBar.setIndicatorColor(getColor(requireContext(), R.color.secondary))
+                        binding.progressBar.trackColor = getColor(requireContext(), R.color.trackEnemyTurnColor)
                     }
                 }
                 is Result.Failure -> {
@@ -404,22 +499,26 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
                 is Result.Success -> {
                     winnerId = winner.data
                     stopTimer()
-                    endMode(winnerId == myId)
                     removeObservers()
-                    usersViewModel.removeRoom(roomId)
 
-                    if (winnerId == myId) {
-                        usersViewModel.saveGame(
-                            userId = myId,
-                            game = Game(winnerId)
-                        )
-                        usersViewModel.saveGame(
-                            userId = enemyId!!,
-                            game = Game(winnerId)
-                        )
+                    endMode(winnerId == myId)
+                    if (isVibrationOn) vibrateDevice(requireContext(), 250L)
+
+                    if (!isPrivate) {
+                        if (winnerId == myId) {
+                            usersViewModel.saveGame(
+                                userId = myId,
+                                game = Game(winnerId)
+                            )
+                            usersViewModel.saveGame(
+                                userId = enemy!!.id,
+                                game = Game(winnerId)
+                            )
+                        }
+
+                        updatePoints(winnerId = winnerId, me!!.points, enemy!!.points)
                     }
-
-                    updatePoints(winnerId = winnerId, myPoints, enemyPoints)
+                    usersViewModel.removeRoom(roomId)
 
 
                     Log.d("TAG", "endmode: winner=$winnerId")
@@ -432,14 +531,27 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
     }
 
     private fun updatePoints(winnerId: String, myPoints: Int, enemyPoints: Int) {
-        val expectedPoints = 1 / (1.65 + 10.0.pow((enemyPoints - myPoints) / 400.0))
-        val points =
-            if (winnerId == myId) (24 * (1 - expectedPoints)).toInt()
-            else (24 * (0 - expectedPoints)).toInt()
+        val textPoints =
+            if (winnerId == myId) {
+                val expectedWinnerPoints = 1 / (1.75 + 10.0.pow((enemyPoints - myPoints) / 800.0))
+                val expectedLoserPoints = 1 / (1.75 + 10.0.pow((myPoints - enemyPoints) / 800.0))
+                val pointsWinner = (24 * (1 - expectedWinnerPoints)).toInt()
+                //val pointsLoser = (24 * (0 - expectedLoserPoints)).toInt()
 
-        usersViewModel.updatePoints(myId, myPoints + points)
-        if (winnerId == myId) binding.tvEndPoints.text = "+$points"
-        else binding.tvEndPoints.text = "$points"
+                usersViewModel.updatePoints(myId, myPoints + pointsWinner)
+                usersViewModel.updatePoints(enemy!!.id, enemyPoints - pointsWinner)
+
+                pointsWinner
+            } else {
+                //val expectedWinnerPoints = 1 / (1.75 + 10.0.pow((enemyPoints - myPoints) / 800.0))
+                val expectedLoserPoints = 1 / (1.75 + 10.0.pow((myPoints - enemyPoints) / 800.0))
+                val pointsLoser = (24 * (1 - expectedLoserPoints)).toInt()
+
+                pointsLoser
+            }
+
+        if (winnerId == myId) binding.tvEndPoints.text = "+$textPoints"
+        else binding.tvEndPoints.text = "-$textPoints"
 
 
     }
@@ -451,8 +563,17 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
             layoutTurn.visible()
             if (isMyTurn) {
                 tvTurn.text = "Ваш ход"
+                tvTurn.setTextColor(getColor(requireContext(), R.color.primary2))
+                tvTurnTime.setTextColor(getColor(requireContext(), R.color.primary2))
+                progressBar.setIndicatorColor(getColor(requireContext(), R.color.primary2))
+                progressBar.trackColor = getColor(requireContext(), R.color.trackColor)
+
             } else {
                 tvTurn.text = "Ход врага"
+                tvTurn.setTextColor(getColor(requireContext(), R.color.secondary))
+                tvTurnTime.setTextColor(getColor(requireContext(), R.color.secondary))
+                progressBar.setIndicatorColor(getColor(requireContext(), R.color.secondary))
+                progressBar.trackColor = getColor(requireContext(), R.color.trackEnemyTurnColor)
             }
 
 
@@ -490,7 +611,7 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
                 zoomLayout.setRenderEffect(RenderEffect.createBlurEffect(16f, 16f, Shader.TileMode.DECAL))
             }
 
-            binding.ivTime.background = getDrawable(requireContext(), R.drawable.ic_pause)
+            ivTime.background = getDrawable(requireContext(), R.drawable.ic_pause)
             zoomLayout.setZoomEnabled(false)
             zoomLayout.setFlingEnabled(false)
             zoomLayout.setScrollEnabled(false)
@@ -510,10 +631,18 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
 
             ivTime.background = getDrawable(requireContext(), R.drawable.ic_clock)
 
+            if (isPrivate) {
+                cvMatchPoints.gone()
+            } else {
+                cvMatchPoints.visible()
+            }
+
             layoutEndTextViews.visible()
+
+
             if (isWinMode) {
                 tvWinner.text = "Вы выиграли!"
-                tvWinner.setTextColor(resources.getColor(R.color.primary, null))
+                tvWinner.setTextColor(resources.getColor(R.color.primary2, null))
                 clMatchPoints.background = getDrawable(requireContext(), R.drawable.gradient_primary)
             } else {
                 tvWinner.text = "Вы проиграли!"
@@ -557,6 +686,8 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
                             column = column
                         )
                     )
+
+
                     timeViewModel.setCurrentTurnStartTime(roomId)
 
                     val cell = if (firstPlayer == currentPlayer) Cell.PLAYER_1 else Cell.PLAYER_2
@@ -564,7 +695,7 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
                         binding.fieldView.drawWinLine = true
                         turnsViewModel.setWinner(roomId, myId)
                     }
-                    playerViewModel.setCurrentPlayer(roomId, enemyId!!)
+                    playerViewModel.setCurrentPlayer(roomId, enemy!!.id)
 
                 }
             }
@@ -584,7 +715,6 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
                 gameMode(isMyTurn)
             } else {
                 buildAlertDialog("Предупреждение", "Вы действительно хотите завершить игру и выйти в меню?") {
-                    usersViewModel.disconnect(roomId)
                     findNavController().navigate(R.id.action_onlineFragment_to_menuFragment)
                 }
             }
@@ -595,17 +725,21 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
         usersViewModel.usersLiveData.removeObservers(viewLifecycleOwner)
         turnsViewModel.turnsLiveData.removeObservers(viewLifecycleOwner)
         turnsViewModel.lastTurnLiveData.removeObservers(viewLifecycleOwner)
+        turnsViewModel.winnerLiveData.removeObservers(viewLifecycleOwner)
         playerViewModel.firstPlayerLiveData.removeObservers(viewLifecycleOwner)
         playerViewModel.currentPlayerLiveData.removeObservers(viewLifecycleOwner)
-        turnsViewModel.winnerLiveData.removeObservers(viewLifecycleOwner)
         timeViewModel.currentTurnStartTimeLiveData.removeObservers(viewLifecycleOwner)
         timeViewModel.timestampLiveData.removeObservers(viewLifecycleOwner)
         timeViewModel.startTimeLiveData.removeObservers(viewLifecycleOwner)
     }
-
     override fun onDestroy() {
         super.onDestroy()
-
-        usersViewModel.disconnect(roomId)
+        if (winnerId == "" && enemy != null) {
+            turnsViewModel.setWinner(roomId, enemy!!.id)
+            usersViewModel.removeRoom(roomId)
+        }
+        if (enemy == null) usersViewModel.removeRoom(roomId)
+        usersViewModel.updateRoomConnected(myId, null)
+        usersViewModel.updateStatus(myId, UserStatus.ONLINE)
     }
 }

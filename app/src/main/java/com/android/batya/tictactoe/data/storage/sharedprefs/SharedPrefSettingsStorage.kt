@@ -4,7 +4,7 @@ import android.content.Context
 import com.android.batya.tictactoe.data.storage.SettingsStorage
 import com.android.batya.tictactoe.util.Constants.SHARED_PREFS_ARE_CROSSES_FIRST
 import com.android.batya.tictactoe.util.Constants.SHARED_PREFS_SETTINGS
-import com.android.batya.tictactoe.util.Constants.SHARED_PREFS_ARE_SOUNDS_ON
+import com.android.batya.tictactoe.util.Constants.SHARED_PREFS_IS_VIBRATION_ON
 import com.android.batya.tictactoe.util.Constants.SHARED_PREFS_IS_LIGHT_MODE
 
 class SharedPrefSettingsStorage(context: Context) : SettingsStorage {
@@ -21,8 +21,8 @@ class SharedPrefSettingsStorage(context: Context) : SettingsStorage {
     override fun saveIsLightMode(isLightMode: Boolean) {
         sharedPreferences.edit().putBoolean(SHARED_PREFS_IS_LIGHT_MODE, isLightMode).apply()
     }
-    override fun saveAreSoundsOn(areSoundsOn: Boolean) {
-        sharedPreferences.edit().putBoolean(SHARED_PREFS_ARE_SOUNDS_ON, areSoundsOn).apply()
+    override fun saveIsVibrationOn(isVibrationOn: Boolean) {
+        sharedPreferences.edit().putBoolean(SHARED_PREFS_IS_VIBRATION_ON, isVibrationOn).apply()
     }
 
     override fun getAreCrossesFirst(): Boolean {
@@ -32,9 +32,8 @@ class SharedPrefSettingsStorage(context: Context) : SettingsStorage {
         return sharedPreferences.getBoolean(SHARED_PREFS_IS_LIGHT_MODE, true)
 
     }
-    override fun getAreSoundsOn(): Boolean {
-        return sharedPreferences.getBoolean(SHARED_PREFS_ARE_SOUNDS_ON, false)
-
+    override fun getIsVibrationOn(): Boolean {
+        return sharedPreferences.getBoolean(SHARED_PREFS_IS_VIBRATION_ON, true)
     }
 
 }

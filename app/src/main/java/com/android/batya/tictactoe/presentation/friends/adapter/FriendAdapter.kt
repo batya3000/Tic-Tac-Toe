@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.android.batya.tictactoe.databinding.ItemFriendBinding
 import com.android.batya.tictactoe.domain.model.User
+import com.android.batya.tictactoe.util.getStatusColor
 
 class FriendAdapter(private val onFriendClicked: (User) -> Unit): RecyclerView.Adapter<FriendAdapter.FriendViewHolder>() {
 
@@ -39,9 +41,14 @@ class FriendAdapter(private val onFriendClicked: (User) -> Unit): RecyclerView.A
             tvNickname.text = user.name
             tvId.text = "ID: ${user.id.take(6)}"
             tvCrowns.text = user.points.toString()
+            ivStatus.setImageResource(getStatusColor(user.status))
 
             cvItem.setOnClickListener {
                 onFriendClicked(user)
+            }
+
+            if (user.photoUri != null) {
+                ivPhoto.load(user.photoUri)
             }
         }
     }

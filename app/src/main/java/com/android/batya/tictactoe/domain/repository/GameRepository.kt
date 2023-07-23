@@ -6,11 +6,9 @@ import com.android.batya.tictactoe.domain.model.Result
 import com.android.batya.tictactoe.domain.model.User
 
 interface GameRepository {
-    fun disconnect(roomId: String)
-
     fun removeRoom(roomId: String)
 
-    fun getUsers(roomId: String): MutableLiveData<Result<List<User>>>
+    fun getConnections(roomId: String): MutableLiveData<Result<List<String>>>
 
     fun setCell(roomId: String, turn: Turn)
 

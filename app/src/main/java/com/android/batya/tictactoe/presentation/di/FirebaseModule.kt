@@ -22,6 +22,7 @@ val firebaseModule = module {
 
     single(named(Constants.INVITATIONS_REF)){ (get<FirebaseDatabase>()).getReference(Constants.INVITATIONS_REF)}
     single(named(Constants.FRIEND_INVITATIONS_REF)){ (get<FirebaseDatabase>()).getReference(Constants.INVITATIONS_REF).child(Constants.FRIEND_INVITATIONS_REF)}
+    single(named(Constants.BATTLE_INVITATIONS_REF)){ (get<FirebaseDatabase>()).getReference(Constants.INVITATIONS_REF).child(Constants.BATTLE_INVITATIONS_REF)}
 
 
 }

@@ -13,12 +13,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:cardElevation="0dp"
-        app:cardCornerRadius="8dp">
+        app:cardCornerRadius="8dp"
+        android:layout_marginTop="10dp">
         <ImageView
             android:id="@+id/image"
             android:layout_width="300dp"
             android:layout_height="300dp"
-
             tools:background="@drawable/help_1"/>
     </androidx.cardview.widget.CardView>
 
@@ -28,10 +28,10 @@
         style="@style/Text.PageTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="18dp"
         android:text="Ход игры"
         android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="3dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cvImage" />
 
@@ -40,9 +40,11 @@
         style="@style/Text.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="На бесконечном поле игркои по очереди ставят свой знак (крестик или нолик)"
+        android:layout_marginTop="12dp"
         android:textColor="#B3FFFFFF"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="3dp"
+
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvSubtitle" />
+        app:layout_constraintTop_toBottomOf="@+id/tvSubtitle"
+        tools:text="На бесконечном поле игркои по очереди ставят свой знак (крестик или нолик)" />
 </androidx.constraintlayout.widget.ConstraintLayout>

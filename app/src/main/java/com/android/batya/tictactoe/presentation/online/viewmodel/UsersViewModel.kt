@@ -3,26 +3,33 @@ package com.android.batya.tictactoe.presentation.online.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.android.batya.tictactoe.domain.model.FriendInvitation
 import com.android.batya.tictactoe.domain.model.Game
 import com.android.batya.tictactoe.domain.model.Result
 import com.android.batya.tictactoe.domain.model.User
+import com.android.batya.tictactoe.domain.model.UserStatus
 import com.android.batya.tictactoe.domain.repository.GameRepository
-import com.android.batya.tictactoe.domain.repository.InvitationRepository
 import com.android.batya.tictactoe.domain.repository.UserRepository
 
 class UsersViewModel(
     private val gameRepository: GameRepository,
     private val userRepository: UserRepository,
-    private val invitationRepository: InvitationRepository,
+) : ViewModel() {
 
-    ) : ViewModel() {
-    private var _usersLiveData: MutableLiveData<Result<List<User>>> = MutableLiveData()
-    val usersLiveData: LiveData<Result<List<User>>> get() = _usersLiveData
+    private var _usersLiveData: MutableLiveData<Result<List<String>>> = MutableLiveData()
+    val usersLiveData: LiveData<Result<List<String>>> get() = _usersLiveData
+
+    private var _meLiveData: MutableLiveData<Result<User>> = MutableLiveData()
+    val meLiveData: LiveData<Result<User>> get() = _meLiveData
+
+    private var _enemyLiveData: MutableLiveData<Result<User>> = MutableLiveData()
+    val enemyLiveData: LiveData<Result<User>> get() = _enemyLiveData
 
 
-    fun disconnect(roomId: String) {
-        gameRepository.disconnect(roomId)
+    fun getMe(myId: String) {
+        _meLiveData = userRepository.getUser(myId)
+    }
+    fun getEnemy(enemyId: String) {
+        _enemyLiveData = userRepository.getUser(enemyId)
     }
 
     fun removeRoom(roomId: String) {
@@ -34,19 +41,19 @@ class UsersViewModel(
     }
 
     fun getConnections(roomId: String) {
-        _usersLiveData = gameRepository.getUsers(roomId)
+        _usersLiveData = gameRepository.getConnections(roomId)
     }
 
     fun updatePoints(userId: String, points: Int) {
         userRepository.updatePoints(userId, points)
     }
-
-    fun sendInvitation(friendInvitation: FriendInvitation) {
-        invitationRepository.sendFriendInvitation(friendInvitation)
+    fun updateStatus(userId: String, userStatus: UserStatus) {
+        userRepository.updateStatus(userId, userStatus)
     }
 
-//    fun addFriend(userId: String, friendId: String) {
-//        userRepository.addFriend(userId, friendId)
-//    }
+    fun updateRoomConnected(userId: String, roomId: String?) {
+        userRepository.updateRoomConnected(userId, roomId)
+    }
+
 
 }

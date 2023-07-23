@@ -53,7 +53,6 @@ class FriendsSearchFragment : Fragment(R.layout.fragment_friends_search) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupAdapter()
         searchViewModel.getUser(myId)
         observeUser()
 
@@ -69,6 +68,8 @@ class FriendsSearchFragment : Fragment(R.layout.fragment_friends_search) {
                     FriendInvitation(
                         fromName = user!!.name,
                         fromId =  user!!.id,
+                        fromPoints = user!!.points,
+                        fromPhotoUri = user!!.photoUri,
                         toId = it.id
                     )
                 )
@@ -112,10 +113,13 @@ class FriendsSearchFragment : Fragment(R.layout.fragment_friends_search) {
         searchViewModel.searchLiveData.observe(viewLifecycleOwner) { users ->
             when (users) {
                 is Result.Success -> {
+                    Log.d("TAG", "observeQuery: ${users.data}")
                     val searchResult = users.data.filter {
                         it.id != myId &&
-                        user?.friends?.containsKey(it.id) == true
+                        user?.friends?.containsKey(it.id) == false
                     }
+                    Log.d("TAG", "observeQueryAfterSearchResult: $searchResult")
+
                     invitationsViewModel.getOutgoingInvitations(myId)
                     observeInvitations(searchResult)
                 }
@@ -131,9 +135,11 @@ class FriendsSearchFragment : Fragment(R.layout.fragment_friends_search) {
         invitationsViewModel.invitesLiveData.observe(viewLifecycleOwner) { invitations ->
             when (invitations) {
                 is Result.Success -> {
+
                     val items = searchResult.filter {
                         it.id !in invitations.data.map { it2 -> it2.toId}
                     }
+                    setupAdapter()
                     friendSearchAdapter.items = items
 
                     if (items.isEmpty()) binding.tvPlayersFoundCount.text = "Нет результатов"
@@ -150,7 +156,7 @@ class FriendsSearchFragment : Fragment(R.layout.fragment_friends_search) {
 
     private fun initEditText() {
         binding.editTextSearch.showKeyboard()
-        binding.editTextSearch.setOnKeyListener { view, i, keyEvent ->
+        binding.editTextSearch.setOnKeyListener { _, _, keyEvent ->
             if (keyEvent.action == KeyEvent.ACTION_DOWN && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
                 //Toast.makeText(context, "${binding.editTextSearch.text}", Toast.LENGTH_SHORT).show()
                 binding.editTextSearch.hideKeyboard()

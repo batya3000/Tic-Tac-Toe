@@ -11,8 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="26dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="26dp">
+        android:layout_marginTop="24dp">
 
         <TextView
             android:id="@+id/tvTitle"
@@ -36,29 +35,60 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTitle" />
-
-        <TextView
-            android:id="@+id/tvFirstTurnSubtitle"
-            style="@style/Text.Button"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvInfo"
+            style="@style/CardView.Secondary"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="(игра на одном устройстве)"
-            android:textColor="#80FFFFFF"
-            android:textSize="12sp"
-            android:layout_marginTop="2dp"
+            android:layout_height="28dp"
+            app:cardCornerRadius="22dp"
+            android:layout_marginTop="6dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvFirstTurn"/>
+            app:layout_constraintTop_toBottomOf="@id/tvFirstTurn"
+            app:cardBackgroundColor="#29FFFFFF">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp">
+
+                <ImageView
+                    android:id="@+id/ivPhoto"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:background="@drawable/ic_persons"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    style="@style/Text.CaptionSemibold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Одно устройство"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivPhoto"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/cvFirstTurn"
             style="@style/CardView.Primary"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="14dp"
             app:cardBackgroundColor="#29FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvFirstTurnSubtitle">
+            app:layout_constraintTop_toBottomOf="@+id/cvInfo">
 
             <RadioGroup
                 android:id="@+id/rgFirstTurn"
@@ -140,7 +170,7 @@
             style="@style/Text.CaptionSemibold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Звуки"
+            android:text="Вибрации"
             android:textColor="@color/white"
             android:layout_marginTop="18dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -276,7 +306,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layoutSite"
+                android:id="@+id/layoutDonate"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -285,7 +315,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/bnSite"
+                    android:id="@+id/bnDonate"
                     style="@style/CardView.White"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
@@ -297,7 +327,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="15dp"
-                        android:background="@drawable/ic_web"/>
+                        android:background="@drawable/ic_donate"/>
                 </androidx.cardview.widget.CardView>
 
                 <TextView
@@ -307,11 +337,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal"
-                    android:text="Сайт игры"
+                    android:text="Поддержать"
                     android:textAlignment="center"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/bnSite" />
+                    app:layout_constraintTop_toBottomOf="@id/bnDonate" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 

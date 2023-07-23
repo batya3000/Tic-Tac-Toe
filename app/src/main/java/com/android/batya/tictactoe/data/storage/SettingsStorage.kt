@@ -5,10 +5,10 @@ interface SettingsStorage {
 
     fun saveAreCrossesFirst(areCrossesFirst: Boolean)
     fun saveIsLightMode(isLightMode: Boolean)
-    fun saveAreSoundsOn(areSoundsOn: Boolean)
+    fun saveIsVibrationOn(isVibrationOn: Boolean)
 
     fun getAreCrossesFirst(): Boolean
     fun getIsLightMode(): Boolean
-    fun getAreSoundsOn(): Boolean
+    fun getIsVibrationOn(): Boolean
 
 }

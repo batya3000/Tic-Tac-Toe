@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.batya.tictactoe.R
@@ -33,6 +34,7 @@ class FriendInvitationsFragment : Fragment(R.layout.fragment_friend_invitations)
     private var user: User? = null
 
     private lateinit var friendInvitationsAdapter: FriendInvitationsAdapter
+    private lateinit var itemTouchHelper: InvitationItemTouchHelper
 
 
     override fun onCreateView(
@@ -63,22 +65,19 @@ class FriendInvitationsFragment : Fragment(R.layout.fragment_friend_invitations)
                 } else {
                     Toast.makeText(context, "Не удается принять запрос...", Toast.LENGTH_SHORT).show()
                 }
-            },
-            onInvitationDeclineClicked = {
-                if (user != null) {
-                    invitesViewModel.declineInvitation(it)
-                } else {
-                    Toast.makeText(context, "Не удается отклонить запрос...", Toast.LENGTH_SHORT).show()
-                }
             }
         )
+        val itemTouchHelper = ItemTouchHelper(InvitationItemTouchHelper(friendInvitationsAdapter))
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView)
+
+
 
         binding.recyclerView.apply {
             adapter = friendInvitationsAdapter
 
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-            itemAnimator = DefaultItemAnimator()
+            //itemAnimator = DefaultItemAnimator()
         }
 
     }

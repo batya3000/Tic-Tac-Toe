@@ -9,33 +9,24 @@ import com.android.batya.tictactoe.domain.model.User
 import com.android.batya.tictactoe.domain.repository.RoomRepository
 
 class RoomViewModel(private val roomRepository: RoomRepository) : ViewModel() {
-    private var _roomsLiveData: MutableLiveData<Result<List<Room>>> = MutableLiveData()
-    val roomsLiveData: LiveData<Result<List<Room>>> get() = _roomsLiveData
-
+    private var _waitingPoolLiveData: MutableLiveData<Result<List<User>>> = MutableLiveData()
+    val waitingPoolLiveData: LiveData<Result<List<User>>> get() = _waitingPoolLiveData
 
     fun createRoom(room: Room) {
         roomRepository.createRoom(room)
     }
 
-    fun connect(roomId: String, user: User) {
-        roomRepository.connect(roomId, user)
-
-    }
-    fun updateIsRunning(roomId: String, isRunning: Boolean) {
-        roomRepository.updateIsRunning(roomId, isRunning)
-
-    }
-
-    fun disconnect(roomId: String, user: User) {
-        roomRepository.disconnect(roomId, user)
+    fun connect(roomId: String, userId: String) {
+        roomRepository.connect(roomId, userId)
     }
 
     fun removeRoom(roomId: String) {
         roomRepository.removeRoom(roomId)
     }
 
-    fun getRooms() {
-        _roomsLiveData = roomRepository.getRooms()
+    fun getWaitingPool() {
+        _waitingPoolLiveData = roomRepository.getWaitingPool()
     }
+
 
 }

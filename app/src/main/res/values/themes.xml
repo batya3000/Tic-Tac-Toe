@@ -10,7 +10,7 @@
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">#5A86F4</item>
+        <item name="android:statusBarColor">@color/primary2</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:fitsSystemWindows">true</item>
         <!-- Customize your theme here. -->
@@ -118,7 +118,7 @@
 
     <style name="ProgressBarTurnStyle" parent="Widget.MaterialComponents.LinearProgressIndicator">
         <item name="trackColor">#333968DF</item>
-        <item name="indicatorColor">@color/primary</item>
+        <item name="indicatorColor">@color/primary2</item>
         <item name="trackCornerRadius">2dp</item>
     </style>
 

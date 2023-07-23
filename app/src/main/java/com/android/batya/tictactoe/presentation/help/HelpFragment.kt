@@ -52,7 +52,7 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
             }
         })
         binding.bnMainMenu.setOnClickListener {
-            findNavController().navigate(R.id.action_helpFragment_to_menuFragment)
+            findNavController().navigateUp()
         }
     }
 

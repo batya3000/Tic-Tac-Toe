@@ -1,5 +1,6 @@
 package com.android.batya.tictactoe.presentation.di
 
+import com.android.batya.tictactoe.presentation.BattleInvitationsViewModel
 import com.android.batya.tictactoe.presentation.auth.AuthViewModel
 import com.android.batya.tictactoe.presentation.friends.viewmodel.FriendInvitationsViewModel
 import com.android.batya.tictactoe.presentation.friends.viewmodel.SearchViewModel
@@ -8,6 +9,9 @@ import com.android.batya.tictactoe.presentation.online.viewmodel.UsersViewModel
 import com.android.batya.tictactoe.presentation.online.viewmodel.PlayerViewModel
 import com.android.batya.tictactoe.presentation.online.viewmodel.TimeViewModel
 import com.android.batya.tictactoe.presentation.online.viewmodel.TurnsViewModel
+import com.android.batya.tictactoe.presentation.profile.NotificationsViewModel
+import com.android.batya.tictactoe.presentation.profile.ProfileViewModel
+import com.android.batya.tictactoe.presentation.service.FirebaseService
 import com.android.batya.tictactoe.presentation.settings.SettingsViewModel
 import com.android.batya.tictactoe.presentation.waiting.RoomViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -29,7 +33,6 @@ val appModule = module {
         UsersViewModel(
             gameRepository = get(),
             userRepository = get(),
-            invitationRepository = get()
         )
     }
     viewModel<TurnsViewModel> {
@@ -66,6 +69,22 @@ val appModule = module {
     viewModel<SettingsViewModel> {
         SettingsViewModel(
             settingsRepository = get()
+        )
+    }
+    viewModel<BattleInvitationsViewModel> {
+        BattleInvitationsViewModel(
+            invitationRepository = get(),
+            roomRepository = get()
+        )
+    }
+    viewModel<ProfileViewModel> {
+        ProfileViewModel(
+            userRepository = get()
+        )
+    }
+    viewModel<NotificationsViewModel> {
+        NotificationsViewModel(
+            notificationRepository = get()
         )
     }
 }

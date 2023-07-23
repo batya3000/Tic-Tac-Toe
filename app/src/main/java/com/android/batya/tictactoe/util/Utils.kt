@@ -1,9 +1,18 @@
 package com.android.batya.tictactoe.util
 
+import android.app.Activity
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.getSystemService
+import com.android.batya.tictactoe.R
+import com.android.batya.tictactoe.domain.model.User
+import com.android.batya.tictactoe.domain.model.UserStatus
 
 fun getWordPlayersInCase(count: Int): String {
     return if ((count % 10 == 1) && (count % 100 != 11)) "игрок"
@@ -38,4 +47,25 @@ fun isNetworkAvailable(context: Context): Boolean {
         }
     }
     return false
+}
+
+fun vibrateDevice(context: Context, time: Long) {
+    val vibrator = getSystemService(context, Vibrator::class.java)
+    vibrator?.let {
+        if (Build.VERSION.SDK_INT >= 26) {
+            it.vibrate(VibrationEffect.createOneShot(time, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            @Suppress("DEPRECATION")
+            it.vibrate(time)
+        }
+    }
+}
+
+fun getStatusColor(status: UserStatus): Int {
+    return when(status) {
+        UserStatus.ONLINE -> R.color.status_online
+        UserStatus.OFFLINE -> R.color.status_offline
+        UserStatus.WAITING -> R.color.status_waiting
+        UserStatus.IN_BATTLE -> R.color.status_battle
+    }
 }

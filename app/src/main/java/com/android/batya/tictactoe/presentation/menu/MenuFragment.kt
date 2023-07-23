@@ -14,12 +14,14 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import coil.load
 import com.android.batya.tictactoe.R
 import com.android.batya.tictactoe.databinding.BottomSheetFragmentBinding
 import com.android.batya.tictactoe.databinding.DialogNicknameBinding
 import com.android.batya.tictactoe.databinding.FragmentMenuBinding
 import com.android.batya.tictactoe.domain.model.Result
 import com.android.batya.tictactoe.domain.model.User
+import com.android.batya.tictactoe.domain.model.UserStatus
 import com.android.batya.tictactoe.presentation.friends.viewmodel.FriendInvitationsViewModel
 import com.android.batya.tictactoe.util.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -54,6 +56,7 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
         setOnClickListeners()
 
         userViewModel.getUser(myId)
+        userViewModel.updateStatus(myId, UserStatus.ONLINE)
         observeUserLiveData()
 
     }
@@ -94,25 +97,8 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
             }
         }
 
-        val dialog = BottomSheetDialog(requireContext())
-        val bsdBinding = BottomSheetFragmentBinding.inflate(layoutInflater)
-
-        binding.tvGameTitle.setOnClickListener {
-            dialog.setCancelable(true)
-            dialog.setContentView(bsdBinding.root)
-            dialog.show()
-        }
-
     }
-    private fun showBottomSheetDialog(nickname: (String) -> Unit) {
 
-        val dialog = BottomSheetDialog(requireContext())
-        val bsdBinding = BottomSheetFragmentBinding.inflate(layoutInflater)
-
-        dialog.setCancelable(true)
-        dialog.setContentView(bsdBinding.root)
-        dialog.show()
-    }
     private fun observeUserLiveData() {
         userViewModel.userLiveData.observe(viewLifecycleOwner) { user ->
             when (user) {
@@ -124,6 +110,11 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
                     else binding.tvNickname.text = user.data.name
 
                     binding.tvCrowns.text = user.data.points.toString()
+                    if (user.data.photoUri != null) {
+                        binding.ivPhoto.load(user.data.photoUri)
+                    } else {
+                        binding.ivPhoto.setImageResource(R.drawable.ic_photo)
+                    }
 
                     invitationsViewModel.getIncomingInvitations(myId)
                     observeInvitations()

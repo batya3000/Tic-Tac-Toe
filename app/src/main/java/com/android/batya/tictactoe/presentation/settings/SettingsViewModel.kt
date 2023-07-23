@@ -3,9 +3,6 @@ package com.android.batya.tictactoe.presentation.settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.android.batya.tictactoe.domain.model.Result
-import com.android.batya.tictactoe.domain.model.Turn
-import com.android.batya.tictactoe.domain.repository.GameRepository
 import com.android.batya.tictactoe.domain.repository.SettingsRepository
 
 class SettingsViewModel(private val settingsRepository: SettingsRepository) : ViewModel() {
@@ -16,14 +13,14 @@ class SettingsViewModel(private val settingsRepository: SettingsRepository) : Vi
     private var _isLightMode: MutableLiveData<Boolean> = MutableLiveData()
     val isLightMode: LiveData<Boolean> get() = _isLightMode
 
-    private var _areSoundsOn: MutableLiveData<Boolean> = MutableLiveData()
-    val areSoundsOn: LiveData<Boolean> get() = _areSoundsOn
+    private var _isVibrationOn: MutableLiveData<Boolean> = MutableLiveData()
+    val isVibrationOn: LiveData<Boolean> get() = _isVibrationOn
 
 
     fun loadSettings() {
         _areCrossesFirst.value = settingsRepository.getAreCrossesFirst()
         _isLightMode.value = settingsRepository.getIsLightMode()
-        _areSoundsOn.value = settingsRepository.getAreSoundsOn()
+        _isVibrationOn.value = settingsRepository.getIsVibrationOn()
     }
 
     fun saveAreCrossesFirst(areCrossesFirst: Boolean) {
@@ -32,8 +29,8 @@ class SettingsViewModel(private val settingsRepository: SettingsRepository) : Vi
     fun saveIsLightMode(isLightMode: Boolean) {
         settingsRepository.saveIsLightMode(isLightMode)
     }
-    fun saveAreSoundsOn(areSoundsOn: Boolean) {
-        settingsRepository.saveAreSoundsOn(areSoundsOn)
+    fun saveIsVibrationOn(isVibrationOn: Boolean) {
+        settingsRepository.saveIsVibrationOn(isVibrationOn)
     }
 
 }

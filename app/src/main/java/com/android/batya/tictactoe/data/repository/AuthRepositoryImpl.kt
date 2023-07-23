@@ -1,10 +1,12 @@
 package com.android.batya.tictactoe.data.repository
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.android.batya.tictactoe.domain.model.User
 import com.android.batya.tictactoe.domain.model.Result
 import com.android.batya.tictactoe.domain.repository.AuthRepository
+import com.android.batya.tictactoe.util.Constants
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -13,9 +15,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
-import com.otaliastudios.opengl.core.use
 import kotlin.concurrent.thread
-import kotlin.random.Random
 
 class AuthRepositoryImpl(
     private val auth: FirebaseAuth,
@@ -38,15 +38,25 @@ class AuthRepositoryImpl(
 
                     val uid = firebaseUser.uid
                     val name = firebaseUser.displayName
-                    val user = User(id = uid, name = name?: "User_${uid.take(6)}", points = 1000, isAnonymousAccount = false)
+                    val user = User(
+                        id = uid,
+                        name = name?: "User_${uid.take(6)}",
+                        photoUri = firebaseUser.photoUrl.toString(),
+                        points = 1000,
+                        isAnonymousAccount = false
+                    )
 
                     val userFromDatabase = getUser(uid)
-
                     thread {
-                        Thread.sleep(1000)
-                        if (userFromDatabase.value == null) {
+                        Thread.sleep(500)
+                        //Log.d("TAG", "trying to store user $uid, userFromDatabase=${(userFromDatabase.value as Result.Success<User>).data}")
+
+                        if (userFromDatabase.value is Result.Success<User> && (userFromDatabase.value as Result.Success<User>).data.id == "" ||
+                            userFromDatabase.value == null
+                           ) {
                             storeUser(user)
                         }
+
                     }
 
                     authenticatedUserMutableLiveData.value = Result.Success(uid)
@@ -106,7 +116,7 @@ class AuthRepositoryImpl(
                 val user = snapshot.getValue<User>()
                 if (user != null) {
                     userMutableLiveData.value = Result.Success(user)
-                    Log.d("TAG", "getting user: ${user.id}")
+                    //Log.d("TAG", "getting user: ${user.id}")
                 }
             }
 
@@ -118,5 +128,9 @@ class AuthRepositoryImpl(
         })
 
         return userMutableLiveData
+    }
+
+    override fun updatePhoto(photoUri: String?) {
+        usersReference.child(auth.currentUser!!.uid).updateChildren(mapOf(Constants.USER_PHOTO_REF to photoUri))
     }
 }
