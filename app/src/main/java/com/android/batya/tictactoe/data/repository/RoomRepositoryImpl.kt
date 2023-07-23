@@ -9,7 +9,6 @@ import com.android.batya.tictactoe.domain.model.UserStatus
 import com.android.batya.tictactoe.domain.repository.RoomRepository
 import com.android.batya.tictactoe.util.Constants.ROOMS_CONNECTIONS_REF
 import com.android.batya.tictactoe.util.Constants.ROOMS_RUNNING_REF
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
 

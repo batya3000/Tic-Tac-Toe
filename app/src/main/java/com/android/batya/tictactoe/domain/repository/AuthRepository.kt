@@ -1,10 +1,9 @@
 package com.android.batya.tictactoe.domain.repository
 
-import android.net.Uri
 import androidx.lifecycle.MutableLiveData
+import com.android.batya.tictactoe.domain.model.Result
 import com.android.batya.tictactoe.domain.model.User
 import com.google.firebase.auth.AuthCredential
-import com.android.batya.tictactoe.domain.model.Result
 
 interface AuthRepository {
 

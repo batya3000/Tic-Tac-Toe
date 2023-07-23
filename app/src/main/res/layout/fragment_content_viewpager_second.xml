@@ -19,7 +19,7 @@
             android:id="@+id/image"
             android:layout_width="300dp"
             android:layout_height="300dp"
-            tools:background="@drawable/help_1"/>
+            android:src="@drawable/help_2"/>
     </androidx.cardview.widget.CardView>
 
 
@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
-        android:text="Ход игры"
+        android:text="@string/help_goal_title"
         android:textColor="@color/white"
         android:layout_marginStart="3dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,5 +46,5 @@
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvSubtitle"
-        tools:text="На бесконечном поле игркои по очереди ставят свой знак (крестик или нолик)" />
+        android:text="@string/help_goal_text" />
 </androidx.constraintlayout.widget.ConstraintLayout>

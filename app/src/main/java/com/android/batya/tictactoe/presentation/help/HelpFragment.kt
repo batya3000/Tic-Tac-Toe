@@ -12,7 +12,6 @@ import com.android.batya.tictactoe.R
 import com.android.batya.tictactoe.databinding.FragmentHelpBinding
 import com.android.batya.tictactoe.util.gone
 import com.android.batya.tictactoe.util.visible
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class HelpFragment : Fragment(R.layout.fragment_help) {
@@ -58,29 +57,18 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
 
 }
 
-class ScreenSlidePagerAdapter(fragment: Fragment, val mPageNumbers :Int) : FragmentStateAdapter(fragment) {
+class ScreenSlidePagerAdapter(fragment: Fragment, private val mPageNumbers: Int) : FragmentStateAdapter(fragment) {
 
 
     override fun getItemCount(): Int = mPageNumbers
 
     override fun createFragment(position: Int): Fragment {
-        val fragment = ViewPagerContentFragment()
+        val fragment1 = ViewPagerContentFragmentFirst()
+        val fragment2 = ViewPagerContentFragmentSecond()
 
-        when(position) {
-            0 ->
-                fragment.arguments = Bundle().apply {
-                    putString("subtitle", "Ход игры")
-                    putString("description", "На бесконечном поле игроки по очереди ставят свой знак (крестик или нолик)")
-                    putInt("image", R.drawable.help_1)
-
-                }
-            1 ->
-                fragment.arguments = Bundle().apply {
-                    putString("subtitle", "Цель игры")
-                    putString("description", "Построить непрерывный ряд из 5 фигур по горизонтали, вертикали или диагонали")
-                    putInt("image", R.drawable.help_2)
-                }
+        return when(position) {
+            0 -> fragment1
+            else -> fragment2
         }
-        return fragment
     }
 }

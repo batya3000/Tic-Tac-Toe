@@ -18,7 +18,7 @@
             style="@style/Text.PageTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Настройки"
+            android:text="@string/settings_title"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +29,7 @@
             style="@style/Text.CaptionSemibold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Первый ход по умолчанию"
+            android:text="@string/settings_subtitle_first_turn"
             android:textColor="@color/white"
             android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,7 +67,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Одно устройство"
+                    android:text="@string/settings_one_device"
                     android:textColor="@color/white"
                     android:textSize="13sp"
 
@@ -103,7 +103,7 @@
                     android:layout_weight="1"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="12dp"
-                    android:text="Крестики"
+                    android:text="@string/settings_button_crosses"
                     tools:checked="true"/>
                 <RadioButton
                     android:id="@+id/bnZeros"
@@ -112,7 +112,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:layout_marginEnd="10dp"
-                    android:text="Нолики"/>
+                    android:text="@string/settings_button_noughts"/>
             </RadioGroup>
         </androidx.cardview.widget.CardView>
 
@@ -121,7 +121,7 @@
             style="@style/Text.CaptionSemibold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Тема приложения"
+            android:text="@string/settings_subtitle_theme"
             android:textColor="@color/white"
             android:layout_marginTop="18dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -152,7 +152,7 @@
                     android:layout_weight="1"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="12dp"
-                    android:text="Светлая"
+                    android:text="@string/settings_button_light"
                     tools:checked="true"/>
                 <RadioButton
                     android:id="@+id/bnDark"
@@ -161,7 +161,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:layout_marginEnd="10dp"
-                    android:text="Тёмная"/>
+                    android:text="@string/settings_button_dark"/>
             </RadioGroup>
         </androidx.cardview.widget.CardView>
 
@@ -170,7 +170,7 @@
             style="@style/Text.CaptionSemibold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Вибрации"
+            android:text="@string/settings_subtitle_vibration"
             android:textColor="@color/white"
             android:layout_marginTop="18dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -201,7 +201,7 @@
                     android:layout_weight="1"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="12dp"
-                    android:text="Вкл"
+                    android:text="@string/settings_button_vibration_on"
                     tools:checked="true"/>
                 <RadioButton
                     android:id="@+id/bnSoundsOff"
@@ -210,7 +210,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:layout_marginEnd="10dp"
-                    android:text="Выкл"/>
+                    android:text="@string/settings_button_vibration_off"/>
             </RadioGroup>
         </androidx.cardview.widget.CardView>
 
@@ -258,7 +258,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal"
-                    android:text="Telegram"
+                    android:text="@string/settings_button_telegram"
                     android:textAlignment="center"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -298,7 +298,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal"
-                    android:text="Нашли баг?"
+                    android:text="@string/settings_button_bug"
                     android:textAlignment="center"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -337,7 +337,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal"
-                    android:text="Поддержать"
+                    android:text="@string/settings_button_donate"
                     android:textAlignment="center"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

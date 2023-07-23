@@ -1,27 +1,25 @@
 package com.android.batya.tictactoe.data.repository
 
-import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.android.batya.tictactoe.domain.model.Game
+import com.android.batya.tictactoe.domain.model.Result
 import com.android.batya.tictactoe.domain.model.User
+import com.android.batya.tictactoe.domain.model.UserStatus
 import com.android.batya.tictactoe.domain.repository.UserRepository
+import com.android.batya.tictactoe.util.Constants.USER_ACCOUNT_TYPE_REF
+import com.android.batya.tictactoe.util.Constants.USER_FRIENDS_REF
+import com.android.batya.tictactoe.util.Constants.USER_GAMES_REF
+import com.android.batya.tictactoe.util.Constants.USER_NAME_REF
+import com.android.batya.tictactoe.util.Constants.USER_POINTS_REF
+import com.android.batya.tictactoe.util.Constants.USER_ROOM_CONNECTED_REF
+import com.android.batya.tictactoe.util.Constants.USER_STATUS_REF
+import com.android.batya.tictactoe.util.Constants.USER_TOKEN_REF
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
-import com.android.batya.tictactoe.domain.model.Result
-import com.android.batya.tictactoe.domain.model.UserStatus
-import com.android.batya.tictactoe.util.Constants.USER_ACCOUNT_TYPE_REF
-import com.android.batya.tictactoe.util.Constants.USER_FRIENDS_REF
-import com.android.batya.tictactoe.util.Constants.USER_GAMES_REF
-import com.android.batya.tictactoe.util.Constants.USER_NAME_REF
-import com.android.batya.tictactoe.util.Constants.USER_PHOTO_REF
-import com.android.batya.tictactoe.util.Constants.USER_POINTS_REF
-import com.android.batya.tictactoe.util.Constants.USER_ROOM_CONNECTED_REF
-import com.android.batya.tictactoe.util.Constants.USER_STATUS_REF
-import com.android.batya.tictactoe.util.Constants.USER_TOKEN_REF
 
 class UserRepositoryImpl(
     private val usersReference: DatabaseReference

@@ -1,7 +1,6 @@
 package com.android.batya.tictactoe.presentation.friends
 
 import android.graphics.Canvas
-import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_IDLE
 import androidx.recyclerview.widget.RecyclerView

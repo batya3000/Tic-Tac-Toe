@@ -11,6 +11,7 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.toRect
 import com.android.batya.tictactoe.R
 import com.android.batya.tictactoe.domain.model.Cell
@@ -62,9 +63,9 @@ class TicTacToeViewOnline(
     private lateinit var lastCellPaint: Paint
     private lateinit var winPaint: Paint
 
-    private var player1 = resources.getDrawable(R.drawable.player1, null)
-    private var player2 = resources.getDrawable(R.drawable.player2, null)
-    private var player2dark = resources.getDrawable(R.drawable.player2dark, null)
+    private var player1 = ResourcesCompat.getDrawable(resources, R.drawable.player1, null)
+    private var player2 = ResourcesCompat.getDrawable(resources, R.drawable.player2, null)
+    private var player2dark = ResourcesCompat.getDrawable(resources, R.drawable.player2dark, null)
 
 
     private val cellRect = RectF()
@@ -260,8 +261,8 @@ class TicTacToeViewOnline(
     private fun drawPlayer1(canvas: Canvas, row: Int, column: Int) {
         val cellRect = getCellRect(row, column)
 
-        player1.bounds = cellRect.toRect()
-        player1.draw(canvas)
+        player1?.bounds = cellRect.toRect()
+        player1?.draw(canvas)
 
 
     }
@@ -269,11 +270,11 @@ class TicTacToeViewOnline(
         val cellRect = getCellRect(row, column)
 
         if (isLightTheme) {
-            player2.bounds = cellRect.toRect()
-            player2.draw(canvas)
+            player2?.bounds = cellRect.toRect()
+            player2?.draw(canvas)
         } else {
-            player2dark.bounds = cellRect.toRect()
-            player2dark.draw(canvas)
+            player2dark?.bounds = cellRect.toRect()
+            player2dark?.draw(canvas)
         }
 
     }

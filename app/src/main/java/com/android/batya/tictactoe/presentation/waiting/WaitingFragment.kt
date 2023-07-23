@@ -25,7 +25,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.UUID
-import kotlin.concurrent.thread
 import kotlin.math.abs
 
 
@@ -67,7 +66,6 @@ class WaitingFragment : Fragment(R.layout.fragment_waiting) {
             observeRoomConnected()
 
             if (roomIdArg == null) {
-                //userViewModel.updateStatus(myId, UserStatus.WAITING)
                 roomViewModel.getWaitingPool()
                 observeWaitingPool()
                 waitingUI()
@@ -190,9 +188,9 @@ class WaitingFragment : Fragment(R.layout.fragment_waiting) {
         binding.lottie.gone()
         binding.imageView.visible()
         binding.imageView.setBackgroundResource(R.drawable.ic_no_internet)
-        binding.tvTitle.text = "Интернет-соединение отсутствует"
-        binding.tvSubtitle.text = "В онлайн-игру сыграть не получится :("
-        binding.tvMainMenu.text = "Выйти в меню"
+        binding.tvTitle.text = getString(R.string.waiting_no_internet_title)
+        binding.tvSubtitle.text = getString(R.string.wating_no_internet_subtitle)
+        binding.tvMainMenu.text = getString(R.string.game_button_main_menu)
         stopTimer()
     }
 
@@ -200,9 +198,9 @@ class WaitingFragment : Fragment(R.layout.fragment_waiting) {
         binding.lottie.gone()
         binding.imageView.visible()
         binding.imageView.setBackgroundResource(R.drawable.ic_decline_battle_invitation)
-        binding.tvTitle.text = "Ваше приглашение отклонили"
-        binding.tvSubtitle.text = "Возможно, что такой друг вам не нужен..."
-        binding.tvMainMenu.text = "Выйти в меню"
+        binding.tvTitle.text = getString(R.string.waiting_invite_reqected_title)
+        binding.tvSubtitle.text = getString(R.string.waiting_invite_declined_subtitle)
+        binding.tvMainMenu.text = getString(R.string.game_button_main_menu)
         stopTimer()
     }
 
@@ -213,9 +211,9 @@ class WaitingFragment : Fragment(R.layout.fragment_waiting) {
             repeatMode = LottieDrawable.RESTART
             playAnimation()
         }
-        binding.tvTitle.text = "Поиск игры..."
+        binding.tvTitle.text = getString(R.string.waiting_in_search)
         binding.tvSubtitle.gone()
-        binding.tvMainMenu.text = "Отменить поиск"
+        binding.tvMainMenu.text = getString(R.string.waiting_button_cancel_search)
         startTimer()
     }
 
@@ -234,9 +232,9 @@ class WaitingFragment : Fragment(R.layout.fragment_waiting) {
             repeatMode = LottieDrawable.RESTART
             playAnimation()
         }
-        binding.tvTitle.text = "Ожидание игрока..."
-        binding.tvSubtitle.text = "Приглашение отправлено"
-        binding.tvMainMenu.text = "Отменить игру"
+        binding.tvTitle.text = getString(R.string.waiting_waiting_for_player_title)
+        binding.tvSubtitle.text = getString(R.string.waiting_waiting_for_player_subtitle)
+        binding.tvMainMenu.text = getString(R.string.waiting_button_cancel_game)
 
         startTimer()
     }

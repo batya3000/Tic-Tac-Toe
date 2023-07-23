@@ -25,7 +25,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.UUID
-import kotlin.concurrent.thread
 import kotlin.math.abs
 
 

@@ -52,7 +52,7 @@ class OfflineFragment : Fragment(R.layout.fragment_offline) {
             if (isPaused) {
                 gameMode()
             } else {
-                buildAlertDialog("Предупреждение", "Вы действительно хотите завершить игру и выйти в меню?") {
+                buildAlertDialog(getString(R.string.dialog_text)) {
                     findNavController().navigateUp()
                 }
             }
@@ -109,11 +109,8 @@ class OfflineFragment : Fragment(R.layout.fragment_offline) {
             bnMainMenu.setOnClickListener {
                 if (winner != Cell.EMPTY) {
                     findNavController().navigateUp()
-
-                    //findNavController().navigate(R.id.action_offlineFragment_to_menuFragment)
                 } else {
-                    buildAlertDialog("Предупреждение", "Вы действительно хотите завершить игру и выйти в меню?") {
-                        //findNavController().navigate(R.id.action_offlineFragment_to_menuFragment)
+                    buildAlertDialog(getString(R.string.dialog_text)) {
                         findNavController().navigateUp()
 
                     }
@@ -121,7 +118,7 @@ class OfflineFragment : Fragment(R.layout.fragment_offline) {
 
             }
             bnRerun.setOnClickListener {
-                buildAlertDialog("Предупреждение", "Вы действительно хотите завершить игру и начать новую?") {
+                buildAlertDialog(getString(R.string.dialog_new_game_text)) {
                     createField()
                     gameMode()
                     resetTimer()
@@ -137,15 +134,15 @@ class OfflineFragment : Fragment(R.layout.fragment_offline) {
         }
     }
 
-    private fun buildAlertDialog(title: String, message: String, onPositiveClicked: () -> Unit) {
+    private fun buildAlertDialog( message: String, onPositiveClicked: () -> Unit) {
         val builder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
-        builder.setTitle(title)
+        builder.setTitle(getString(R.string.dialog_title_warning))
         builder.setMessage(message)
-        builder.setPositiveButton("Да") { _, _ ->
+        builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
             onPositiveClicked()
 
         }
-        builder.setNegativeButton("Нет") { _, _ -> }
+        builder.setNegativeButton(getString(R.string.no)) { _, _ -> }
         builder.show()
     }
     private fun initChronometer() {
@@ -153,12 +150,12 @@ class OfflineFragment : Fragment(R.layout.fragment_offline) {
     }
 
     private fun startTimer() {
-        binding.chronometer.base = SystemClock.elapsedRealtime() + timeWhenStopped;
+        binding.chronometer.base = SystemClock.elapsedRealtime() + timeWhenStopped
         binding.chronometer.start()
     }
 
     private fun stopTimer() {
-        timeWhenStopped = binding.chronometer.base - SystemClock.elapsedRealtime();
+        timeWhenStopped = binding.chronometer.base - SystemClock.elapsedRealtime()
         binding.chronometer.stop()
     }
     private fun resetTimer() {
@@ -207,13 +204,13 @@ class OfflineFragment : Fragment(R.layout.fragment_offline) {
     private fun setCurrentTurn(turn: TURN = getCurrentTurn()) {
         binding.fieldView.currentTurn = turn
         val turnString = if (turn == TURN.PLAYER_1) {
-            if (areCrossesFirst) "крестик"
-            else "нолик"
+            if (areCrossesFirst) getString(R.string.turn_cross)
+            else getString(R.string.turn_nought)
         } else {
-            if (areCrossesFirst) "нолик"
-            else "крестик"
+            if (areCrossesFirst) getString(R.string.turn_nought)
+            else getString(R.string.turn_cross)
         }
-        binding.tvTurn.text = "Сейчас ходит $turnString"
+        binding.tvTurn.text = getString(R.string.turn) + turnString
     }
     private fun getCurrentTurn(): TURN {
         return binding.fieldView.currentTurn
@@ -233,7 +230,7 @@ class OfflineFragment : Fragment(R.layout.fragment_offline) {
                 zoomLayout.setRenderEffect(RenderEffect.createBlurEffect(16f, 16f, Shader.TileMode.DECAL))
             }
 
-            binding.tvTime.text = "Матч идёт "
+            binding.tvTime.text = getString(R.string.game_offline_subtitle_match_is_on)
             stopTimer()
 
             binding.ivTime.background = getDrawable(requireContext(), R.drawable.ic_pause)
@@ -255,7 +252,7 @@ class OfflineFragment : Fragment(R.layout.fragment_offline) {
             layoutEndTextViews.gone()
             bnNext.gone()
 
-            tvTime.text = "Матч идёт "
+            tvTime.text = getString(R.string.game_offline_subtitle_match_is_on)
             tvPause.gone()
 
             startTimer()
@@ -288,18 +285,18 @@ class OfflineFragment : Fragment(R.layout.fragment_offline) {
             layoutEndTextViews.visible()
 
             val winnerString = if (winner == Cell.PLAYER_1) {
-                if (areCrossesFirst) "крестики"
-                else "нолики"
+                if (areCrossesFirst) getString(R.string.turn_crosses)
+                else getString(R.string.turn_noughts)
             } else {
-                if (areCrossesFirst) "нолики"
-                else "крестики"
+                if (areCrossesFirst) getString(R.string.turn_noughts)
+                else getString(R.string.turn_crosses)
             }
 
-            tvWinner.text = "Победили $winnerString!"
+            tvWinner.text = getString(R.string.won) + winnerString
 
                 //tvPause.text = "Матч окончен"
 
-            tvTime.text = "Длительность матча "
+            tvTime.text = getString(R.string.game_match_duration)
             ivTime.background = getDrawable(requireContext(), R.drawable.ic_clock)
 
 

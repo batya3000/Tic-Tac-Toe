@@ -3,7 +3,6 @@ package com.android.batya.tictactoe.domain.repository
 import androidx.lifecycle.MutableLiveData
 import com.android.batya.tictactoe.domain.model.Turn
 import com.android.batya.tictactoe.domain.model.Result
-import com.android.batya.tictactoe.domain.model.User
 
 interface GameRepository {
     fun removeRoom(roomId: String)

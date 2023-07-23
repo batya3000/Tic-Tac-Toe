@@ -15,7 +15,6 @@ import com.android.batya.tictactoe.util.Constants.LAST_TURN_REF
 import com.android.batya.tictactoe.util.Constants.MATCH_START_TIME_REF
 import com.android.batya.tictactoe.util.Constants.TIMESTAMP_REF
 import com.android.batya.tictactoe.util.Constants.WINNER_REF
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 

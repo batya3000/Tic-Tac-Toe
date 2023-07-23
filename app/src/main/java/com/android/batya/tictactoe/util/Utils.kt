@@ -1,17 +1,13 @@
 package com.android.batya.tictactoe.util
 
-import android.app.Activity
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.os.VibratorManager
 import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.getSystemService
 import com.android.batya.tictactoe.R
-import com.android.batya.tictactoe.domain.model.User
 import com.android.batya.tictactoe.domain.model.UserStatus
 
 fun getWordPlayersInCase(count: Int): String {
@@ -51,14 +47,7 @@ fun isNetworkAvailable(context: Context): Boolean {
 
 fun vibrateDevice(context: Context, time: Long) {
     val vibrator = getSystemService(context, Vibrator::class.java)
-    vibrator?.let {
-        if (Build.VERSION.SDK_INT >= 26) {
-            it.vibrate(VibrationEffect.createOneShot(time, VibrationEffect.DEFAULT_AMPLITUDE))
-        } else {
-            @Suppress("DEPRECATION")
-            it.vibrate(time)
-        }
-    }
+    vibrator?.vibrate(VibrationEffect.createOneShot(time, VibrationEffect.DEFAULT_AMPLITUDE))
 }
 
 fun getStatusColor(status: UserStatus): Int {

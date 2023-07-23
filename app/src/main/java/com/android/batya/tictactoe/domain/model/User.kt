@@ -1,7 +1,5 @@
 package com.android.batya.tictactoe.domain.model
 
-import android.net.Uri
-
 data class User(
     var id: String = "",
     val name: String = "",

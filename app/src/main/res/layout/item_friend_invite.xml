@@ -63,7 +63,7 @@
                     style="@style/Text.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="batya" />
+                    tools:text="batya" />
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cvCrowns"
                     style="@style/CardView.Secondary"
@@ -111,7 +111,7 @@
                 style="@style/Text.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ID: 123sdf3"
+                tools:text="ID: 123sdf3"
                 android:textColor="#80FFFFFF"
                 android:textSize="12sp" />
         </LinearLayout>

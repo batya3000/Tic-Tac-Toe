@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,7 +33,6 @@ class FriendInvitationsFragment : Fragment(R.layout.fragment_friend_invitations)
     private var user: User? = null
 
     private lateinit var friendInvitationsAdapter: FriendInvitationsAdapter
-    private lateinit var itemTouchHelper: InvitationItemTouchHelper
 
 
     override fun onCreateView(

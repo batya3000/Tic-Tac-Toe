@@ -1,6 +1,5 @@
 package com.android.batya.tictactoe.presentation.settings
 
-import android.R.id.message
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,8 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.android.batya.tictactoe.R
 import com.android.batya.tictactoe.databinding.FragmentSettingsBinding
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.android.batya.tictactoe.util.vibrateDevice
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -61,6 +59,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
         binding.bnDonate.setOnClickListener {
             startBoosty()
+        }
+
+        binding.bnSoundsOn.setOnClickListener {
+            vibrateDevice(requireContext(), 100)
         }
     }
 

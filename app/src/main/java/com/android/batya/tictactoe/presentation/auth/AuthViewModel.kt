@@ -1,6 +1,5 @@
 package com.android.batya.tictactoe.presentation.auth
 
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

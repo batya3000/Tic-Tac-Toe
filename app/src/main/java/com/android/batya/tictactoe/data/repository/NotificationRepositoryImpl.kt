@@ -2,12 +2,9 @@ package com.android.batya.tictactoe.data.repository
 
 import android.util.Log
 import com.android.batya.tictactoe.data.api.NotificationAPI
-import com.android.batya.tictactoe.data.storage.SettingsStorage
 import com.android.batya.tictactoe.domain.model.PushNotification
 import com.android.batya.tictactoe.domain.repository.NotificationRepository
 import com.google.gson.Gson
-import okhttp3.ResponseBody
-import retrofit2.Response
 
 class NotificationRepositoryImpl(
     private val notificationAPI: NotificationAPI,

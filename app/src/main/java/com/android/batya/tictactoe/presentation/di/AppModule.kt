@@ -11,7 +11,6 @@ import com.android.batya.tictactoe.presentation.online.viewmodel.TimeViewModel
 import com.android.batya.tictactoe.presentation.online.viewmodel.TurnsViewModel
 import com.android.batya.tictactoe.presentation.profile.NotificationsViewModel
 import com.android.batya.tictactoe.presentation.profile.ProfileViewModel
-import com.android.batya.tictactoe.presentation.service.FirebaseService
 import com.android.batya.tictactoe.presentation.settings.SettingsViewModel
 import com.android.batya.tictactoe.presentation.waiting.RoomViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -19,70 +18,69 @@ import org.koin.dsl.module
 
 val appModule = module {
 
-    viewModel<AuthViewModel> {
+    viewModel {
         AuthViewModel(
             authRepository = get()
         )
     }
-    viewModel<UserViewModel> {
+    viewModel {
         UserViewModel(
             userRepository = get()
         )
     }
-    viewModel<UsersViewModel> {
+    viewModel {
         UsersViewModel(
             gameRepository = get(),
             userRepository = get(),
         )
     }
-    viewModel<TurnsViewModel> {
+    viewModel {
         TurnsViewModel(
             gameRepository = get()
         )
     }
-    viewModel<PlayerViewModel> {
+    viewModel {
         PlayerViewModel(
             gameRepository = get()
         )
     }
-    viewModel<TimeViewModel> {
+    viewModel {
         TimeViewModel(
             gameRepository = get()
         )
     }
-    viewModel<RoomViewModel> {
+    viewModel {
         RoomViewModel(
             roomRepository = get()
         )
     }
-    viewModel<SearchViewModel> {
+    viewModel {
         SearchViewModel(
             userRepository = get()
         )
     }
-    viewModel<FriendInvitationsViewModel> {
+    viewModel {
         FriendInvitationsViewModel(
             invitationRepository = get(),
             userRepository = get()
         )
     }
-    viewModel<SettingsViewModel> {
+    viewModel {
         SettingsViewModel(
             settingsRepository = get()
         )
     }
-    viewModel<BattleInvitationsViewModel> {
+    viewModel {
         BattleInvitationsViewModel(
             invitationRepository = get(),
-            roomRepository = get()
         )
     }
-    viewModel<ProfileViewModel> {
+    viewModel {
         ProfileViewModel(
             userRepository = get()
         )
     }
-    viewModel<NotificationsViewModel> {
+    viewModel {
         NotificationsViewModel(
             notificationRepository = get()
         )

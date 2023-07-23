@@ -10,12 +10,8 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.android.batya.tictactoe.R
-import com.android.batya.tictactoe.data.repository.NotificationRepositoryImpl
-import com.android.batya.tictactoe.domain.repository.NotificationRepository
-import com.android.batya.tictactoe.domain.repository.UserRepository
 import com.android.batya.tictactoe.presentation.MainActivity
 import com.android.batya.tictactoe.util.Constants
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlin.random.Random

@@ -93,7 +93,7 @@
                         android:id="@+id/tvTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Матч длится "
+                        android:text="@string/game_match_is_on"
                         android:textColor="@color/primary2" />
 
                     <Chronometer
@@ -110,7 +110,7 @@
                 style="@style/Text.PageTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Пауза"
+                android:text="@string/game_subtitle_pause"
                 android:visibility="gone"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -145,13 +145,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:textSize="21sp"
-                    android:text="Матч окончен" />
+                    android:text="@string/game_subtitle_match_end" />
                 <TextView
                     android:id="@+id/tvWinner"
                     style="@style/Text.CaptionSemibold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Победили крестики!"
+                    android:text="@string/game_title_crosses_won"
                     android:textColor="@color/primary2"
                     android:textSize="23sp"
                     android:layout_marginTop="6dp"
@@ -206,7 +206,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="Откатить шаг"
+                        android:text="@string/game_button_rollback"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -256,7 +256,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="22dp"
-                    android:text="Далее"
+                    android:text="@string/game_button_next"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -304,7 +304,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
-                        android:text="Продолжить игру"
+                        android:text="@string/game_button_continue"
 
 
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -342,7 +342,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
-                        android:text="Переиграть"
+                        android:text="@string/game_button_outplay"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -376,7 +376,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
-                        android:text="Выйти в меню"
+                        android:text="@string/game_button_main_menu"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

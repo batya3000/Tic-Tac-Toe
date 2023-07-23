@@ -1,14 +1,10 @@
 package com.android.batya.tictactoe.presentation.online
 
-import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
 import android.graphics.RenderEffect
 import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
-import android.os.VibrationEffect
-import android.os.Vibrator
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,14 +13,19 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.content.ContextCompat.getColor
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.android.batya.tictactoe.R
 import com.android.batya.tictactoe.databinding.FragmentOnlineBinding
-import com.android.batya.tictactoe.domain.model.*
+import com.android.batya.tictactoe.domain.model.Cell
+import com.android.batya.tictactoe.domain.model.Field
+import com.android.batya.tictactoe.domain.model.FriendInvitation
+import com.android.batya.tictactoe.domain.model.Game
+import com.android.batya.tictactoe.domain.model.Result
+import com.android.batya.tictactoe.domain.model.Turn
+import com.android.batya.tictactoe.domain.model.User
+import com.android.batya.tictactoe.domain.model.UserStatus
 import com.android.batya.tictactoe.presentation.friends.viewmodel.FriendInvitationsViewModel
 import com.android.batya.tictactoe.presentation.offline.OnCellClickedListener
 import com.android.batya.tictactoe.presentation.online.viewmodel.PlayerViewModel
@@ -32,11 +33,17 @@ import com.android.batya.tictactoe.presentation.online.viewmodel.TimeViewModel
 import com.android.batya.tictactoe.presentation.online.viewmodel.TurnsViewModel
 import com.android.batya.tictactoe.presentation.online.viewmodel.UsersViewModel
 import com.android.batya.tictactoe.presentation.settings.SettingsViewModel
-import com.android.batya.tictactoe.util.*
+import com.android.batya.tictactoe.util.Constants
+import com.android.batya.tictactoe.util.gone
+import com.android.batya.tictactoe.util.timeToString
+import com.android.batya.tictactoe.util.toast
+import com.android.batya.tictactoe.util.vibrateDevice
+import com.android.batya.tictactoe.util.visible
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
+import java.util.Date
+import java.util.Timer
 import kotlin.concurrent.thread
 import kotlin.math.pow
 
@@ -133,7 +140,7 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
         if (winnerId == "") timeViewModel.setTimestamp(roomId)
         val duration = Date(timestamp).time - Date(matchStartTime).time
 
-        binding.tvTime.text = "Матч длится ${timeToString(duration)}"
+        binding.tvTime.text = getString(R.string.game_online_subtitle_match_is_on_short) + timeToString(duration)
         val turnDuration = 60000 - (Date(timestamp).time - Date(currentTurnStartTime).time)
 
         binding.progressBar.progress = turnDuration.toInt()
@@ -270,7 +277,7 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
 
             bnMainMenu.setOnClickListener {
                 if (winnerId == "") {
-                    buildAlertDialog("Предупреждение", "Вы действительно хотите выйти в меню?") {
+                    buildAlertDialog(getString(R.string.dialog_text)) {
                         findNavController().navigate(R.id.action_onlineFragment_to_menuFragment)
                     }
                 } else {
@@ -278,7 +285,7 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
                 }
             }
             bnSurrender.setOnClickListener {
-                buildAlertDialog("Предупреждение", "Вы действительно хотите сдаться?") {
+                buildAlertDialog(getString(R.string.dialog_text_surrender)) {
                     if (winnerId == "" && enemy != null) turnsViewModel.setWinner(roomId, enemy!!.id)
                     if (enemy == null) findNavController().navigate(R.id.action_onlineFragment_to_menuFragment)
                 }
@@ -360,7 +367,7 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
                             if (firstPlayer == null) {
                                 activity?.runOnUiThread {
                                     if (findNavController().currentDestination?.id == R.id.onlineFragment) {
-                                        requireContext().toast("Попробуйте еще раз")
+                                        requireContext().toast(getString(R.string.toast_error_connect))
                                         findNavController().navigate(R.id.action_onlineFragment_to_menuFragment)
                                     }
                                 }
@@ -473,14 +480,14 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
                     currentPlayer = player.data
                     if (currentPlayer == myId) {
                         isMyTurn = true
-                        binding.tvTurn.text = "Ваш ход"
+                        binding.tvTurn.text = getString(R.string.game_your_turn)
                         binding.tvTurn.setTextColor(getColor(requireContext(), R.color.primary2))
                         binding.tvTurnTime.setTextColor(getColor(requireContext(), R.color.primary2))
                         binding.progressBar.setIndicatorColor(getColor(requireContext(), R.color.primary2))
                         binding.progressBar.trackColor = getColor(requireContext(), R.color.trackColor)
                     } else {
                         isMyTurn = false
-                        binding.tvTurn.text = "Ход врага"
+                        binding.tvTurn.text = getString(R.string.game_enemy_turn)
                         binding.tvTurn.setTextColor(getColor(requireContext(), R.color.secondary))
                         binding.tvTurnTime.setTextColor(getColor(requireContext(), R.color.secondary))
                         binding.progressBar.setIndicatorColor(getColor(requireContext(), R.color.secondary))
@@ -562,14 +569,14 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
             layoutGameMenu.visible()
             layoutTurn.visible()
             if (isMyTurn) {
-                tvTurn.text = "Ваш ход"
+                tvTurn.text = getString(R.string.game_your_turn)
                 tvTurn.setTextColor(getColor(requireContext(), R.color.primary2))
                 tvTurnTime.setTextColor(getColor(requireContext(), R.color.primary2))
                 progressBar.setIndicatorColor(getColor(requireContext(), R.color.primary2))
                 progressBar.trackColor = getColor(requireContext(), R.color.trackColor)
 
             } else {
-                tvTurn.text = "Ход врага"
+                tvTurn.text = getString(R.string.game_enemy_turn)
                 tvTurn.setTextColor(getColor(requireContext(), R.color.secondary))
                 tvTurnTime.setTextColor(getColor(requireContext(), R.color.secondary))
                 progressBar.setIndicatorColor(getColor(requireContext(), R.color.secondary))
@@ -581,7 +588,7 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
             layoutEndTextViews.gone()
             layoutEndMenu.gone()
 
-            tvTime.text = "Матч длится ..."
+            tvTime.text = getString(R.string.game_online_subtitle_match_is_on)
             tvPause.gone()
 
 
@@ -641,11 +648,11 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
 
 
             if (isWinMode) {
-                tvWinner.text = "Вы выиграли!"
+                tvWinner.text = getString(R.string.game_subtitle_you_won)
                 tvWinner.setTextColor(resources.getColor(R.color.primary2, null))
                 clMatchPoints.background = getDrawable(requireContext(), R.drawable.gradient_primary)
             } else {
-                tvWinner.text = "Вы проиграли!"
+                tvWinner.text = getString(R.string.game_subtitle_you_lose)
                 tvWinner.setTextColor(resources.getColor(R.color.secondary, null))
                 clMatchPoints.background = getDrawable(requireContext(), R.drawable.gradient_yellow)
             }
@@ -656,15 +663,14 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
     }
 
 
-    private fun buildAlertDialog(title: String, message: String, onPositiveClicked: () -> Unit) {
+    private fun buildAlertDialog(message: String, onPositiveClicked: () -> Unit) {
         val builder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
-        builder.setTitle(title)
+        builder.setTitle(getString(R.string.dialog_title_warning))
         builder.setMessage(message)
-        builder.setPositiveButton("Да") { _, _ ->
+        builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
             onPositiveClicked()
-            //TODO()
         }
-        builder.setNegativeButton("Нет") { _, _ -> }
+        builder.setNegativeButton(getString(R.string.no)) { _, _ -> }
         builder.show()
     }
 
@@ -714,7 +720,7 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
             if (isPaused) {
                 gameMode(isMyTurn)
             } else {
-                buildAlertDialog("Предупреждение", "Вы действительно хотите завершить игру и выйти в меню?") {
+                buildAlertDialog(getString(R.string.dialog_text)) {
                     findNavController().navigate(R.id.action_onlineFragment_to_menuFragment)
                 }
             }

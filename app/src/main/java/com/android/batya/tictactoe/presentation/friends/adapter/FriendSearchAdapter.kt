@@ -1,15 +1,9 @@
 package com.android.batya.tictactoe.presentation.friends.adapter
 
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.compose.ui.res.colorResource
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getColor
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.android.batya.tictactoe.R
 import com.android.batya.tictactoe.databinding.ItemFriendSearchBinding
 import com.android.batya.tictactoe.domain.model.User
 import com.android.batya.tictactoe.util.getStatusColor

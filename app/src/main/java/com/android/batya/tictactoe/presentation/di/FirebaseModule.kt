@@ -1,7 +1,6 @@
 package com.android.batya.tictactoe.presentation.di
 
 import com.android.batya.tictactoe.util.Constants
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
@@ -11,8 +10,8 @@ import org.koin.dsl.module
 
 val firebaseModule = module {
 
-    single<FirebaseAuth> { Firebase.auth }
-    single<FirebaseDatabase> { Firebase.database }
+    single { Firebase.auth }
+    single { Firebase.database }
 
     single(named(Constants.USERS_REF)){ (get<FirebaseDatabase>()).getReference(Constants.USERS_REF)}
 
