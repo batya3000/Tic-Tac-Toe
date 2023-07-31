@@ -2,8 +2,9 @@
 Kotlin, Firebase, Koin, Retrofit
 
 Жду проверки в Google Play...
-![1](https://github.com/batya3000/TicTacToe/assets/73420343/e904740d-0f52-4505-823e-97ff989cd198)
-![2](https://github.com/batya3000/TicTacToe/assets/73420343/5cb67761-e0f1-411b-a0f7-422d62a9687b)
-![5](https://github.com/batya3000/TicTacToe/assets/73420343/eabea77d-f635-4237-96b1-feedc6913a0d)
-![4](https://github.com/batya3000/TicTacToe/assets/73420343/72875ae4-8658-4aa9-9678-fb07d717ef6c)
-![3](https://github.com/batya3000/TicTacToe/assets/73420343/18673a6e-657b-49fb-b5ed-b786b036aa0e)
+
+![1](https://github.com/batya3000/TicTacToe/assets/73420343/11710344-1f5f-486b-803f-5df378b7f731)
+![2](https://github.com/batya3000/TicTacToe/assets/73420343/33b7b211-538c-4158-80e8-b1e8e4b11449)
+![5](https://github.com/batya3000/TicTacToe/assets/73420343/947fcc23-2d73-4035-94b5-cdf3ca7532b4)
+![4](https://github.com/batya3000/TicTacToe/assets/73420343/fd22b828-2de2-4861-91b4-0e59f6e697e2)
+![3](https://github.com/batya3000/TicTacToe/assets/73420343/07e48fbe-ee16-4aad-a86f-99e389981dd3)
