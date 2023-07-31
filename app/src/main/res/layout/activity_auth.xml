@@ -4,14 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.auth.AuthActivity"
-    android:forceDarkAllowed="false"
-    tools:targetApi="q">
+    tools:context=".presentation.auth.AuthActivity">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/light_background"
         android:scaleType="centerCrop"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_fileName="background.json"
+        app:lottie_speed="0.35"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_repeatMode="restart"
+        android:scaleType="centerCrop"
+        android:alpha="0.05"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -28,6 +42,7 @@
             android:layout_height="wrap_content"
             android:text="@string/auth_title_welcome"
             android:textColor="@color/white"
+            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -41,9 +56,22 @@
             android:text="@string/auth_subtitle"
             android:textColor="@color/white"
             android:textAlignment="center"
+            android:layout_marginTop="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+        <ImageView
+            android:id="@+id/ivTicTacToe"
+            android:layout_width="230dp"
+            android:layout_height="230dp"
+            android:src="@drawable/ic_auth"
+            app:layout_constraintBottom_toTopOf="@+id/bnLoginGoogle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSubtitle" />
+
+
         <androidx.cardview.widget.CardView
             android:id="@+id/bnLoginGoogle"
             style="@style/CardView.Secondary"
@@ -51,15 +79,17 @@
             android:layout_height="60dp"
             app:cardElevation="5dp"
             android:visibility="visible"
+            android:layout_marginTop="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:foreground="?attr/selectableItemBackgroundBorderless">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/gradient_yellow">
+                android:background="@drawable/gradient_secondary">
 
                 <TextView
                     style="@style/Text.Button"
@@ -92,7 +122,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/bnLoginGoogle"
-            app:cardElevation="5dp">
+            app:cardElevation="5dp"
+            android:foreground="?attr/selectableItemBackgroundBorderless">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

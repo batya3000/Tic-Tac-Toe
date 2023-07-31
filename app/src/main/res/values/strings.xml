@@ -3,7 +3,7 @@
     <string name="quest">Quest</string>
     <string name="loading">loading...</string>
     <string name="menu_title">Tic-Tac-Toe</string>
-    <string name="menu_subtitle">Huge field</string>
+    <string name="menu_subtitle">Huge field!</string>
     <string name="menu_select_text">Select game mode:</string>
     <string name="menu_button_solo">One device</string>
     <string name="menu_button_online">Online game</string>
@@ -34,7 +34,7 @@
     <string name="settings_button_vibration_off">Off</string>
     <string name="settings_button_telegram">Telegram</string>
     <string name="settings_button_bug">Found a bug?</string>
-    <string name="settings_button_donate">Support</string>
+    <string name="settings_button_donate">Support us</string>
     <string name="help_title">Guide</string>
     <string name="help_button_menu">Menu</string>
     <string name="help_button_next">Next</string>
@@ -91,10 +91,20 @@
     <string name="turn">"Turn: "</string>
     <string name="game_match_duration">"Match duration "</string>
     <string name="won">"Winner:  "</string>
-    <string name="game_offline_subtitle_match_is_on">"Match lasts  "</string>
-    <string name="game_online_subtitle_match_is_on_short">"Match lasts "</string>
+    <string name="game_offline_subtitle_match_is_on">Match lasts</string>
+    <string name="game_online_subtitle_match_is_on_short">Match lasts</string>
     <string name="dialog_text_surrender">Do you really want to give up?</string>
     <string name="toast_error_connect">Error. Try again</string>
     <string name="game_enemy_turn">Enemy move</string>
     <string name="game_subtitle_you_lose">You lose!</string>
+    <string name="dialog_delete_account">Are you sure you want to delete your account?</string>
+    <string name="dialog_nickname_title">Nickname change</string>
+    <string name="dialog_nickname_yes">Change</string>
+    <string name="dialog_nickname_no">Cancel</string>
+    <string name="toast_google">You must be logged into Google to change your nickname.</string>
+    <string name="toast_nickname_error">Nickname must be between 4 and 12 characters long</string>
+    <string name="toast_no_internet">No internet connection</string>
+    <string name="toast_user_getting_error">Unable to get user...</string>
+    <string name="toast_connect_google">Connect Google to your account!</string>
+    <string name="profile_delete_account">Request account deletion</string>
 </resources>

@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.MainActivity"
-    android:forceDarkAllowed="false"
-    tools:targetApi="q">
+    tools:context=".presentation.MainActivity">
 
     <ImageView
         android:id="@+id/imageView"
@@ -14,6 +12,24 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/light_background" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.06"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="background.json"
+        app:lottie_loop="true"
+        app:lottie_repeatMode="restart"
+        app:lottie_speed="0.35" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"

@@ -66,7 +66,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
                 android:layout_marginEnd="12dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:foreground="?attr/selectableItemBackgroundBorderless">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -74,18 +75,19 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
+
                     <TextView
                         android:id="@+id/tvMenu"
                         style="@style/Text.Button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
-                        android:layout_marginBottom="2dp"
                         android:text="@string/help_button_menu"
                         android:textColor="@color/primary"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"/>
+
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -102,11 +104,12 @@
                 style="@style/CardView.Secondary"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:foreground="?attr/selectableItemBackgroundBorderless">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/gradient_yellow"
+                    android:background="@drawable/gradient_secondary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -117,7 +120,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
-                        android:layout_marginBottom="2dp"
                         android:text="@string/help_button_next"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

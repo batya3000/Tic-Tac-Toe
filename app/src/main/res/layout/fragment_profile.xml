@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.MainActivity"
-    android:background="@drawable/light_background">
+    tools:background="@drawable/light_background">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:paddingBottom="40dp"
+        android:clipToPadding="false">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -92,7 +92,7 @@
                                 style="@style/CardView.Primary"
                                 android:layout_width="13dp"
                                 android:layout_height="13dp"
-                                app:cardBackgroundColor="#4E98F8"
+                                app:cardBackgroundColor="@color/user_status_background"
                                 app:cardCornerRadius="50dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent">
@@ -110,7 +110,7 @@
                                         android:id="@+id/ivStatus"
                                         android:layout_width="match_parent"
                                         android:layout_height="14dp"
-                                        android:src="@color/status_offline"
+                                        android:src="@color/user_status_offline"
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
@@ -164,7 +164,8 @@
                         app:cardBackgroundColor="#29FFFFFF"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:foreground="?attr/selectableItemBackgroundBorderless">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -213,7 +214,7 @@
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@drawable/gradient_yellow">
+                            android:background="@drawable/gradient_secondary">
 
                             <TextView
                                 style="@style/Text.Button"
@@ -473,7 +474,8 @@
                 app:cardBackgroundColor="#29FFFFFF"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cvStats">
+                app:layout_constraintTop_toBottomOf="@+id/cvStats"
+                android:foreground="?attr/selectableItemBackgroundBorderless">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -545,7 +547,8 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cvFriends">
+                app:layout_constraintTop_toBottomOf="@+id/cvFriends"
+                android:foreground="?attr/selectableItemBackgroundBorderless">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -587,7 +590,8 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cvBattle">
+                app:layout_constraintTop_toBottomOf="@+id/cvBattle"
+                android:foreground="?attr/selectableItemBackgroundBorderless">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -630,7 +634,8 @@
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cvLinkWithGoogle">
+                app:layout_constraintTop_toBottomOf="@+id/cvLinkWithGoogle"
+                android:foreground="?attr/selectableItemBackgroundBorderless">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -672,7 +677,8 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cvSignOut">
+                app:layout_constraintTop_toBottomOf="@+id/cvSignOut"
+                android:foreground="?attr/selectableItemBackgroundBorderless">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -702,6 +708,21 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
+            <TextView
+                android:id="@+id/tvDelete"
+                style="@style/Text.Subtitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:visibility="gone"
+                android:text="@string/profile_delete_account"
+                android:textColor="#4DFFFFFF"
+                android:textAlignment="center"
+                android:textSize="12sp"
+                android:layout_marginTop="18dp"
+                app:layout_constraintTop_toBottomOf="@id/cvRemoveFriend"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

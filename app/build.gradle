@@ -8,15 +8,15 @@ plugins {
 }
 
 android {
-    namespace 'com.android.batya.tictactoe'
+    namespace 'com.batya.tictactoe'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.android.batya.tictactoe"
+        applicationId "com.batya.tictactoe"
         minSdk 27
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 6
+        versionName "1.14"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -50,22 +50,22 @@ dependencies {
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:32.1.1')
 
-    implementation 'com.google.firebase:firebase-auth-ktx:22.0.0'
+    implementation 'com.google.firebase:firebase-auth-ktx:22.1.0'
 
     // Also add the dependency for the Google Play services library and specify its version
-    implementation 'com.google.android.gms:play-services-auth:20.5.0'
+    implementation 'com.google.android.gms:play-services-auth:20.6.0'
     implementation 'com.google.firebase:firebase-database-ktx'
 
     // Add the dependencies for the In-App Messaging and Analytics libraries
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:20.3.2'
 
-    implementation 'com.google.firebase:firebase-messaging-ktx:23.1.2'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.7'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.2.0'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.4.0'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
     implementation 'androidx.lifecycle:lifecycle-process:2.6.1'
     // Navigation
-    def nav_version = "2.5.3"
+    def nav_version = "2.6.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     // Feature module Support

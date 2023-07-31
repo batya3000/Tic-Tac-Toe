@@ -37,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/bottom_sheet_invitation_text"
                 android:textSize="19sp"
+                android:layout_marginStart="4dp"
                 android:textColor="@color/black"/>
         </LinearLayout>
 
@@ -70,7 +71,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/gradient_yellow">
+                    android:background="@drawable/gradient_secondary">
                     <TextView
                         style="@style/Text.Button"
                         android:layout_width="wrap_content"

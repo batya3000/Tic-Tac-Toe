@@ -73,7 +73,8 @@
             app:cardBackgroundColor="#29FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cvSearch">
+            app:layout_constraintTop_toBottomOf="@+id/cvSearch"
+            android:foreground="?attr/selectableItemBackgroundBorderless">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

@@ -4,7 +4,7 @@
     <string name="quest">Гость</string>
     <string name="loading">загрузка...</string>
     <string name="menu_title">Крестики-нолики</string>
-    <string name="menu_subtitle">Большое поле</string>
+    <string name="menu_subtitle">Большое поле!</string>
     <string name="menu_select_text">Выберите режим игры:</string>
     <string name="menu_button_solo">Одно устройство</string>
     <string name="menu_button_online">Онлайн игра</string>
@@ -12,7 +12,6 @@
     <string name="menu_button_friends">Друзья</string>
     <string name="menu_button_settings">Настройки</string>
     <string name="dialog_title_warning">Предупреждение</string>
-    <string name="bottom_sheet_invitation_text">приглашает вас в игру</string>
     <string name="bottom_sheet_button_decline">Отклонить</string>
     <string name="bottom_sheet_button_accept">Принять</string>
     <string name="waiting_button_cancel">Отменить поиск</string>
@@ -70,8 +69,8 @@
     <string name="turn">"Сейчас ходит "</string>
     <string name="game_match_duration">"Длительность матча "</string>
     <string name="won">"Победили "</string>
-    <string name="game_offline_subtitle_match_is_on">Матч идёт </string>
-    <string name="game_online_subtitle_match_is_on_short">Матч длится </string>
+    <string name="game_offline_subtitle_match_is_on">Матч идёт</string>
+    <string name="game_online_subtitle_match_is_on_short">Матч длится</string>
     <string name="game_online_subtitle_match_is_on">Матч длится ...</string>
     <string name="game_button_surrender">Сдаться</string>
     <string name="auth_title_welcome">Приветствуем!</string>
@@ -98,4 +97,15 @@
     <string name="toast_error_connect">Ошибка. Попробуйте еще раз</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="bottom_sheet_invitation_text">приглашает вас в игру</string>
+    <string name="dialog_delete_account">Вы уверены, что хотите удалить аккаунт?</string>
+    <string name="dialog_nickname_title">Изменение ника</string>
+    <string name="dialog_nickname_yes">Сменить ник</string>
+    <string name="dialog_nickname_no">Отменить</string>
+    <string name="toast_google">Для изменения ника вы должны войти в Google</string>
+    <string name="toast_nickname_error">Ник должен быть длиной от 4 до 12 символов</string>
+    <string name="toast_no_internet">Нет интернета</string>
+    <string name="toast_user_getting_error">Проблемы с получением пользователя...</string>
+    <string name="toast_connect_google">Подключите Google к аккаунту!</string>
+    <string name="profile_delete_account">Запросить удаление аккаунта</string>
 </resources>

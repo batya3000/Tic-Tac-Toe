@@ -19,7 +19,8 @@
             android:id="@+id/image"
             android:layout_width="300dp"
             android:layout_height="300dp"
-            android:src="@drawable/help_1"/>
+            android:src="@drawable/help_1"
+            android:scaleType="centerCrop"/>
     </androidx.cardview.widget.CardView>
 
 

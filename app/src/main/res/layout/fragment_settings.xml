@@ -219,7 +219,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="30dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -239,10 +239,10 @@
                     style="@style/CardView.White"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:foreground="?attr/selectableItemBackgroundBorderless">
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -282,7 +282,8 @@
                     android:layout_height="60dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:foreground="?attr/selectableItemBackgroundBorderless">
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -321,7 +322,8 @@
                     android:layout_height="60dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:foreground="?attr/selectableItemBackgroundBorderless">
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -344,6 +346,5 @@
                     app:layout_constraintTop_toBottomOf="@id/bnDonate" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

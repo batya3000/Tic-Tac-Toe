@@ -6,11 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".presentation.MainActivity"
     tools:background="@drawable/light_background">
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/light_background"
-        android:scaleType="centerCrop"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

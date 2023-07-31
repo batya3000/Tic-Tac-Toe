@@ -11,7 +11,8 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/tvYourNickname"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:foreground="?attr/selectableItemBackgroundBorderless">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -62,7 +63,7 @@
                     style="@style/CardView.Primary"
                     android:layout_width="13dp"
                     android:layout_height="13dp"
-                    app:cardBackgroundColor="#4E98F8"
+                    app:cardBackgroundColor="@color/user_status_background"
                     app:cardCornerRadius="50dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
@@ -79,7 +80,7 @@
                             android:id="@+id/ivStatus"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:src="@color/status_offline"
+                            android:src="@color/user_status_offline"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"

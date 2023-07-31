@@ -12,20 +12,37 @@
     <color name="primary_variant">#B9EAFB</color>
     <color name="primary_shadow">#0031AC</color>
 
+    <color name="indicatorColor">@color/primary2</color>
     <color name="trackColor">#333968DF</color>
-    <color name="trackEnemyTurnColor">#33F06C4F</color>
+
+    <color name="indicatorColorNight">@color/white</color>
+    <color name="trackColorNight">#33FFFFFF</color>
+
+    <color name="indicatorColorEnemy">@color/secondary</color>
+    <color name="trackEnemyColor">#33F06C4F</color>
+
+
 
     <color name="secondary">#F06C4F</color>
     <color name="secondary_shadow">#9F0020</color>
     <color name="gray">#B9EAFB</color>
 
-    <color name="status_online">#A8FF80</color>
-    <color name="status_offline">#DDDDDD</color>
-    <color name="status_waiting">#FFDE8B</color>
-    <color name="status_battle">#FF411F</color>
+    <color name="user_status_online">#A8FF80</color>
+    <color name="user_status_offline">#DDDDDD</color>
+    <color name="user_status_waiting">#FFDE8B</color>
+    <color name="user_status_battle">#FF411F</color>
 
-    <color name="black">#000000</color>
+    <color name="user_status_background">#4994F7</color>
+    <color name="user_status_background_night">#415FA8</color>
+
+    <color name="black">#112A50</color>
     <color name="white">#FFFFFFFF</color>
-    
+    <color name="white60">#99FFFFFF</color>
+
+    <color name="status_bar">#217CF6</color>
+    <color name="status_bar_battle">#E6E6E6</color>
+
+    <color name="status_bar_night">#2B4FAD</color>
+
 
 </resources>
