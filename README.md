@@ -1,5 +1,11 @@
 # TicTacToe
-Kotlin, Firebase, Koin, Retrofit
+Использованные технологии:
+* Kotlin
+* Firebase (Auth, FCM, Realtime DB)
+* Koin
+* Retrofit
+* Clean
+* MVVM
 
 Жду проверки в Google Play...
 
