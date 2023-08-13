@@ -39,4 +39,10 @@ class UserViewModel(private val userRepository: UserRepository) : ViewModel() {
             userRepository.removeFriend(user.id, it.value)
         }
     }
+    fun userLoaded(): Boolean {
+        return userLiveData.value is Result.Success
+    }
+    fun isUserAnonymous(): Boolean {
+        return userLiveData.value is Result.Success && (userLiveData.value as Result.Success<User>).data.isAnonymousAccount
+    }
 }

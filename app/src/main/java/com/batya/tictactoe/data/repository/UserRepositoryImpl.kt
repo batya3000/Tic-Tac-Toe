@@ -129,9 +129,13 @@ class UserRepositoryImpl(
             override fun onDataChange(snapshot: DataSnapshot) {
                 val users = mutableListOf<User>()
                 for (s in snapshot.children) {
-                    val user = s.getValue(User::class.java)
-                    if (user != null) {
-                        users.add(user)
+                    try {
+                        val user = s.getValue(User::class.java)
+                        if (user != null) {
+                            users.add(user)
+                        }
+                    } catch (e: Exception) {
+                        Log.d("TAG", "getUsers: ${e.message}")
                     }
                 }
                 usersLiveData.value = Result.Success(users)

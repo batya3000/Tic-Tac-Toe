@@ -19,7 +19,6 @@ import com.batya.tictactoe.util.gone
 import com.batya.tictactoe.util.isNetworkAvailable
 import com.batya.tictactoe.util.toast
 import com.batya.tictactoe.util.visible
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -56,13 +55,15 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
 
     }
 
+
+
     private fun setOnClickListeners() {
         binding.bnSolo.setOnClickListener {
             findNavController().navigate(R.id.action_menuFragment_to_offlineFragment)
         }
 
         binding.bnOnline.setOnClickListener {
-            findNavController().navigate(R.id.action_menuFragment_to_waitingFragment)
+            navigateOrToast(R.id.action_menuFragment_to_waitingFragment)
         }
 
         binding.bnHelp.setOnClickListener {
@@ -74,24 +75,24 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
         }
 
         binding.bnProfile.setOnClickListener {
-            if (isNetworkAvailable(requireContext())) {
-                findNavController().navigate(R.id.action_menuFragment_to_profileFragment)
-            } else {
-                requireContext().toast(getString(R.string.toast_no_internet))
-            }
-
+            navigateOrToast(R.id.action_menuFragment_to_profileFragment)
         }
 
         binding.bnFriends.setOnClickListener {
-            if (user?.isAnonymousAccount == false) {
-                findNavController().navigate(R.id.action_menuFragment_to_friendsFragment)
-            } else if (user == null) {
-                requireContext().toast(getString(R.string.toast_user_getting_error))
-            } else {
-                requireContext().toast(getString(R.string.toast_connect_google))
+            if (userViewModel.isUserAnonymous()) {
+                navigateOrToast(R.id.action_menuFragment_to_friendsFragment)
             }
         }
 
+    }
+    private fun navigateOrToast(action: Int) {
+        if (!isNetworkAvailable(requireContext())) {
+            requireContext().toast(getString(R.string.toast_no_internet))
+        } else if (userViewModel.userLoaded()) {
+            findNavController().navigate(action)
+        } else {
+            requireContext().toast(getString(R.string.toast_user_getting_error))
+        }
     }
 
     private fun observeUserLiveData() {
